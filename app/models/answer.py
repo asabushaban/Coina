@@ -13,7 +13,8 @@ class Answer(db.Model):
     updated_at = db.Column(db.DateTime(timezone=True), nullable=False)
 
     user = relationship("User", back_populates="answers")
-    question = relationship("Question", back_populates="answers")
+    questions = relationship("Question", back_populates="answers")
+    comments = relationship("Comment", back_populates="answers")
 
 def to_dict(self):
     return {
@@ -24,6 +25,3 @@ def to_dict(self):
                     'created_at' : self.created_at.strftime("%m-%d-%Y %I:%M %p"),
                     'updated_at' : self.updated_at.strftime("%m-%d-%Y %I:%M %p"),
                 }
-
-
-# port_asset = db.relationship("Asset", back_populates="portfolios", lazy=True)

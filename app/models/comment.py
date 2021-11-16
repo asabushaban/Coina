@@ -13,7 +13,7 @@ class Comment(db.Model):
     updated_at = db.Column(db.DateTime(timezone=True), nullable=False)
 
     user = relationship("User", back_populates="comments")
-    answer = relationship("Answer", back_populates="comments")
+    answers = relationship("Answer", back_populates="comments")
 
 def to_dict(self):
     return {

@@ -13,6 +13,7 @@ class Question(db.Model):
     updated_at = db.Column(db.DateTime(timezone=True), nullable=False)
 
     user = relationship("User", back_populates="questions")
+    answers = relationship("Answer", back_populates="questions")
 
 def to_dict(self):
     return {
