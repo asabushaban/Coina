@@ -51,13 +51,13 @@ def delete_answers(id):
 # delete a question (delete)
 @answers_routes.route('/<int:id>', methods=["PUT"])
 @login_required
-def edit_questions(id):
-    question = Question.query.get(id)
-    user_id = question.user_id
+def edit_answers(id):
+    answer = Answer.query.get(id)
     form = AnswerForm()
     if(form.validate_on_submit):
-        question.question = form.data["question"]
+        answer.body = form.data["body"]
         db.session.commit()
-        return {question.id:question.to_dict() for question in Question.query.filter(Question.user_id==user_id)}
+        answers = {answer.id: answer.to_dict() for answer in Answer.query.filter(Answer.question_id==id)}
+        return answers
     else:
         return None

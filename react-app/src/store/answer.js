@@ -76,12 +76,12 @@ export const getAnswers = questionId => async dispatch => {
 //edit a ANSWER
 
 export const editAnswer = (id, answer) => async dispatch => {
-  const res = await fetch(`/api/ANSWERs/${id}`, {
+  const res = await fetch(`/api/answers/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ answer }),
+    body: JSON.stringify({ body: answer }),
   });
 
   if (res.ok) {

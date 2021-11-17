@@ -86,6 +86,13 @@ function QuestionPage({ question }) {
             <button hidden={mainAnswer != answer.id} onClick={answerDeleter}>
               delete
             </button>
+            <button hidden={mainAnswer != answer.id} onClick={answerEditor}>
+              edit
+            </button>
+            <input
+              hidden={mainAnswer != answer.id}
+              onChange={e => setEditedAnswer(e.target.value)}
+            ></input>
           </div>
         ))
       ) : (
