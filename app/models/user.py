@@ -4,6 +4,20 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from datetime import timezone
 
+upVote_answer = db.Table(
+   'upVote_answer',
+    db.Column("user_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
+    db.Column("answer_id", db.Integer, db.ForeignKey("answers.id"), primary_key=True),
+    db.Column("upVote", db.Boolean),
+    )
+
+upVote_question = db.Table(
+   'upVote_question',
+    db.Column("user_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
+    db.Column("question_id", db.Integer, db.ForeignKey("questions.id"), primary_key=True),
+    db.Column("upVote", db.Boolean),
+    )
+
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
