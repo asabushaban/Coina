@@ -48,6 +48,21 @@ function HomePage() {
     );
   };
 
+  const addUpVote = () => async dispatch => {
+    const res = await fetch(`/api/questions/addupvote`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ question: mainQuestion, user_id: sessionUser.id }),
+    });
+
+    // if (res.ok) {
+    //   const data = await res.json();
+    //   dispatch(addQuestion(data));
+    // }
+  };
+
   return (
     <>
       <div id="mainHomeContainer">
@@ -84,7 +99,7 @@ function HomePage() {
                   hidden={mainQuestion != obj.id}
                 ></input>
                 <div>
-                  <button>comment</button>
+                  <button hidden={mainQuestion != obj.id}>upvote</button>
                 </div>
               </div>
             ))
