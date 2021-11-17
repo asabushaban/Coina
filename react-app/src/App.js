@@ -5,6 +5,7 @@ import LoginForm from "./components/auth/LoginForm";
 import SignUpForm from "./components/auth/SignUpForm";
 import NavBar from "./components/NavBar";
 import HomePage from "./components/Home/HomePage";
+import QuestionPage from "./components/Question/QuestionPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UsersList from "./components/UsersList";
 import User from "./components/User";
@@ -41,6 +42,9 @@ function App() {
         </ProtectedRoute>
         <ProtectedRoute path="/users/:userId" exact={true}>
           <User />
+        </ProtectedRoute>
+        <ProtectedRoute path="/question/:questionId" exact={true}>
+          <QuestionPage />
         </ProtectedRoute>
         <ProtectedRoute path="/" exact={true}>
           <HomePage />

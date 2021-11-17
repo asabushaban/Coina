@@ -1,7 +1,8 @@
-import "./HomePage.css";
+import "./QuestionPage.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+
 import {
   addNewQuestion,
   getQuestions,
@@ -9,11 +10,12 @@ import {
   editQuestion,
 } from "../../store/question";
 
-function HomePage() {
+function QuestionPage({ question }) {
   const sessionUser = useSelector(state => state.session.user);
   const userQuestions = useSelector(state => state.questions);
 
   const dispatch = useDispatch();
+  const params = useParams();
 
   const [newQuestion, setNewQuestion] = useState("");
   const [mainQuestion, setMainQuestion] = useState(4);
@@ -50,45 +52,10 @@ function HomePage() {
   return (
     <>
       <div id="mainHomeContainer">
-        <h1>Coina</h1>
-        <input onChange={e => setNewQuestion(e.target.value)}></input>
-        <button onClick={submitQuestion}>submit question</button>
-        {userQuestions
-          ? Object.values(userQuestions).map(obj => (
-              <div
-                className="questionContainter"
-                onClick={e => setMainQuestion(obj.id)}
-              >
-                <Link
-                  className="questionLink"
-                  to={`/question/${obj.id}`}
-                  question={obj}
-                >
-                  {obj.question}
-                </Link>
-                <button
-                  onClick={questionDeleter}
-                  hidden={mainQuestion != obj.id}
-                >
-                  delete
-                </button>
-                <button
-                  onClick={questionEditor}
-                  hidden={mainQuestion != obj.id}
-                >
-                  edit
-                </button>
-                <input
-                  onChange={e => setEditedQuestion(e.target.value)}
-                  hidden={mainQuestion != obj.id}
-                ></input>
-                <button>answer</button>
-              </div>
-            ))
-          : null}
+        <h1>{userQuestions[params.questionId].question}</h1>
       </div>
     </>
   );
 }
 
-export default HomePage;
+export default QuestionPage;
