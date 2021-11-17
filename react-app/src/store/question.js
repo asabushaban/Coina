@@ -1,6 +1,11 @@
 //create a question
 const ADD_QUESTION = "questions/ADD";
+
+//get questions for one user
 const LOAD_QUESTION = "questions/LOAD";
+
+//remove a question
+const REMOVE_QUESTION = "questions/REMOVE";
 
 const initialState = {};
 
@@ -14,6 +19,23 @@ const loadQuestion = questions => ({
   questions,
 });
 
+const remove = id => ({
+  type: REMOVE_QUESTION,
+  id,
+});
+// delete a question
+export const deleteQuestion = id => async dispatch => {
+  const response = await fetch(`/api/questions/${id}`, {
+    method: "DELETE",
+  });
+  dispatch(remove(id));
+  if (response.ok) {
+    await response.json();
+    return response;
+  }
+};
+
+//create a question
 export const addNewQuestion = (question, userId) => async dispatch => {
   const res = await fetch(`/api/questions/add`, {
     method: "POST",
@@ -29,7 +51,7 @@ export const addNewQuestion = (question, userId) => async dispatch => {
   }
 };
 
-// get a watchlists
+//get questions for one user
 export const getQuestions = userId => async dispatch => {
   const response = await fetch(`/api/questions/myquestions/${userId}`);
 
@@ -44,6 +66,23 @@ export const getQuestions = userId => async dispatch => {
     }
   } else {
     return ["An error occurred. Please try again."];
+  }
+};
+
+//edit a question
+
+export const editQuestion = (id, question) => async dispatch => {
+  const res = await fetch(`/api/questions/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ question }),
+  });
+
+  if (res.ok) {
+    const questions = await res.json();
+    dispatch(loadQuestion(questions));
   }
 };
 
@@ -69,6 +108,11 @@ export default function reducer(state = initialState, action) {
         ...state,
         ...newQuestions,
       };
+    }
+    case REMOVE_QUESTION: {
+      const newState = { ...state };
+      delete newState[action.id];
+      return newState;
     }
     default:
       return state;
