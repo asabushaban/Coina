@@ -56,8 +56,8 @@ export const addNewAnswer = (body, userId, questionId) => async dispatch => {
 };
 
 //get ANSWERs for one user
-export const getAnswers = userId => async dispatch => {
-  const response = await fetch(`/api/answers/${userId}`);
+export const getAnswers = questionId => async dispatch => {
+  const response = await fetch(`/api/answers/${questionId}`);
 
   if (response.ok) {
     const answers = await response.json();
@@ -105,7 +105,7 @@ export default function reducer(state = initialState, action) {
     }
     case LOAD_ANSWER: {
       const newAnswer = {};
-      Object.values(action.answer).forEach(element => {
+      Object.values(action.answers).forEach(element => {
         newAnswer[element.id] = element;
       });
       return {

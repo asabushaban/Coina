@@ -3,7 +3,7 @@ from flask import Blueprint, request
 from operator import itemgetter
 from app.forms import AnswerForm
 from datetime import date, datetime, timedelta
-from app.models import User, db, Answer
+from app.models import User, db, Answer, Question, question
 
 answers_routes = Blueprint('answers', __name__)
 today = datetime.now()
@@ -30,18 +30,20 @@ def add_question():
         return None
 
 
-# get a users questions (read)
-@answers_routes.route('/myquestions/<int:id>')
+# get a users answers (read)
+@answers_routes.route('/<int:id>')
 @login_required
-def user_questions(id):
-    user = User.query.get(id)
-    return {question.id:question.to_dict() for question in Question.query.filter(Question.user_id==user.id)}
+def question_answers(id):
+    question = Question.query.get(id)
+    answers = {answer.id: answer.to_dict() for answer in Answer.query.filter(Answer.question_id==id)}
+    return answers
+    # return {question.id:question.to_dict() for question in Question.query.filter(Question.user_id==user.id)}
 
 # delete a question (delete)
 @answers_routes.route('/<int:id>', methods=["DELETE"])
 @login_required
-def delete_questions(id):
-    question = Question.query.get(id)
+def delete_answers(id):
+    question = Answer.query.get(id)
     db.session.delete(question)
     db.session.commit()
     return {"delete": "success"}

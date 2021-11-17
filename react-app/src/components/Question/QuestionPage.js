@@ -20,9 +20,13 @@ import {
 function QuestionPage({ question }) {
   const sessionUser = useSelector(state => state.session.user);
   const userQuestions = useSelector(state => state.questions);
-
+  const allAnswers = useSelector(state => state.answers);
   const dispatch = useDispatch();
   const params = useParams();
+
+  const answers = Object.values(allAnswers).filter(
+    answer => +answer.question_id === +params.questionId
+  );
 
   const [newAnswer, setNewAnswer] = useState("");
   const [openAnswer, setOpenAnswer] = useState(true);
@@ -30,7 +34,8 @@ function QuestionPage({ question }) {
   const [editedAnswer, setEditedAnswer] = useState("");
 
   useEffect(async () => {
-    dispatch(getQuestions(sessionUser.id));
+    await dispatch(getQuestions(sessionUser.id));
+    await dispatch(getAnswers(+params.questionId));
   }, [dispatch]);
 
   const submitAnswer = async e => {
@@ -46,7 +51,7 @@ function QuestionPage({ question }) {
     e.preventDefault();
     if (!sessionUser) return;
     dispatch(deleteAnswer(mainAnswer)).then(() =>
-      dispatch(getAnswers(sessionUser.id))
+      dispatch(getAnswers(+params.questionId))
     );
   };
 
@@ -54,7 +59,7 @@ function QuestionPage({ question }) {
     e.preventDefault();
     if (!sessionUser) return;
     await dispatch(editAnswer(mainAnswer, editedAnswer)).then(() =>
-      dispatch(getAnswers(sessionUser.id))
+      dispatch(getAnswers(+params.questionId))
     );
   };
 
@@ -73,6 +78,18 @@ function QuestionPage({ question }) {
         </div>
       ) : (
         <p>loading...</p>
+      )}
+      {answers ? (
+        answers.map(answer => (
+          <div onClick={e => setMainAnswer(answer.id)}>
+            <p>{answer.body}</p>
+            <button hidden={mainAnswer != answer.id} onClick={answerDeleter}>
+              delete
+            </button>
+          </div>
+        ))
+      ) : (
+        <p>no answers</p>
       )}
     </>
   );
