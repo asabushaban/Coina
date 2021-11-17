@@ -3,7 +3,9 @@ from app.models import User, db
 from app.forms import LoginForm
 from app.forms import SignUpForm
 from flask_login import current_user, login_user, logout_user, login_required
+from datetime import date, datetime, timedelta
 
+today = datetime.now()
 auth_routes = Blueprint('auth', __name__)
 
 
@@ -63,9 +65,12 @@ def sign_up():
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
         user = User(
+            name=form.data['name'],
             username=form.data['username'],
             email=form.data['email'],
-            password=form.data['password']
+            password=form.data['password'],
+            created_at=today,
+            updated_at=today
         )
         db.session.add(user)
         db.session.commit()
