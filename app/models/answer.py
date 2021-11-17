@@ -16,12 +16,12 @@ class Answer(db.Model):
     questions = relationship("Question", back_populates="answers")
     comments = relationship("Comment", back_populates="answers")
 
-def to_dict(self):
-    return {
-                    'id': self.id,
-                    'body': self.body,
-                    'user_id': self.user_id,
-                    'question_id': self.question_id,
-                    'created_at' : self.created_at.strftime("%m-%d-%Y %I:%M %p"),
-                    'updated_at' : self.updated_at.strftime("%m-%d-%Y %I:%M %p"),
-                }
+    def to_dict(self):
+        return {
+                        'id': self.id,
+                        'body': self.body,
+                        'user_id': self.user_id,
+                        'question_id': self.question_id,
+                        'created_at' : self.created_at.strftime("%m-%d-%Y %I:%M %p"),
+                        'updated_at' : self.updated_at.strftime("%m-%d-%Y %I:%M %p"),
+                    }

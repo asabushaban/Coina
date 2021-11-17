@@ -1,5 +1,7 @@
+import "./HomePage.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   addNewQuestion,
   getQuestions,
@@ -47,26 +49,46 @@ function HomePage() {
 
   return (
     <>
-      <h1>Coina</h1>
-      <input onChange={e => setNewQuestion(e.target.value)}></input>
-      <button onClick={submitQuestion}>submit question</button>
-      {userQuestions
-        ? Object.values(userQuestions).map(obj => (
-            <div onClick={e => setMainQuestion(obj.id)}>
-              {obj.question}
-              <button onClick={questionDeleter} hidden={mainQuestion != obj.id}>
-                delete
-              </button>
-              <button onClick={questionEditor} hidden={mainQuestion != obj.id}>
-                edit
-              </button>
-              <input
-                onChange={e => setEditedQuestion(e.target.value)}
-                hidden={mainQuestion != obj.id}
-              ></input>
-            </div>
-          ))
-        : null}
+      <div id="mainHomeContainer">
+        <h1>Coina</h1>
+        <input onChange={e => setNewQuestion(e.target.value)}></input>
+        <button onClick={submitQuestion}>submit question</button>
+        {userQuestions
+          ? Object.values(userQuestions).map(obj => (
+              <div
+                className="questionContainter"
+                onClick={e => setMainQuestion(obj.id)}
+              >
+                <Link
+                  className="questionLink"
+                  to={`/question/${obj.id}`}
+                  question={obj}
+                >
+                  {obj.question}
+                </Link>
+                <button
+                  onClick={questionDeleter}
+                  hidden={mainQuestion != obj.id}
+                >
+                  delete
+                </button>
+                <button
+                  onClick={questionEditor}
+                  hidden={mainQuestion != obj.id}
+                >
+                  edit
+                </button>
+                <input
+                  onChange={e => setEditedQuestion(e.target.value)}
+                  hidden={mainQuestion != obj.id}
+                ></input>
+                <div>
+                  <button>comment</button>
+                </div>
+              </div>
+            ))
+          : null}
+      </div>
     </>
   );
 }
