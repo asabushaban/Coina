@@ -12,7 +12,6 @@ today = datetime.now()
 @questions_routes.route('/add', methods=["POST"])
 @login_required
 def add_question():
-    print(request.json)
     # question, user_id = itemgetter("question", "user_id")(request.json)
     # user = User.query.get(user_id)
     form = QuestionForm()
@@ -36,3 +35,26 @@ def add_question():
 def user_questions(id):
     user = User.query.get(id)
     return {question.id:question.to_dict() for question in Question.query.filter(Question.user_id==user.id)}
+
+# delete a question (delete)
+@questions_routes.route('/<int:id>', methods=["DELETE"])
+@login_required
+def delete_questions(id):
+    question = Question.query.get(id)
+    db.session.delete(question)
+    db.session.commit()
+    return {"delete": "success"}
+
+# delete a question (delete)
+@questions_routes.route('/<int:id>', methods=["PUT"])
+@login_required
+def edit_questions(id):
+    question = Question.query.get(id)
+    user_id = question.user_id
+    form = QuestionForm()
+    if(form.validate_on_submit):
+        question.question = form.data["question"]
+        db.session.commit()
+        return {question.id:question.to_dict() for question in Question.query.filter(Question.user_id==user_id)}
+    else:
+        return None

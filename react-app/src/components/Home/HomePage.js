@@ -1,6 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { addNewQuestion, getQuestions } from "../../store/question";
+import {
+  addNewQuestion,
+  getQuestions,
+  deleteQuestion,
+  editQuestion,
+} from "../../store/question";
 
 function HomePage() {
   const sessionUser = useSelector(state => state.session.user);
@@ -9,6 +14,8 @@ function HomePage() {
   const dispatch = useDispatch();
 
   const [newQuestion, setNewQuestion] = useState("");
+  const [mainQuestion, setMainQuestion] = useState(4);
+  const [editedQuestion, setEditedQuestion] = useState("");
 
   useEffect(async () => {
     dispatch(getQuestions(sessionUser.id));
@@ -22,17 +29,41 @@ function HomePage() {
     );
   };
 
+  const questionDeleter = async e => {
+    e.preventDefault();
+    if (!sessionUser) return;
+    dispatch(deleteQuestion(mainQuestion)).then(() =>
+      dispatch(getQuestions(sessionUser.id))
+    );
+  };
+
+  const questionEditor = async e => {
+    e.preventDefault();
+    if (!sessionUser) return;
+    await dispatch(editQuestion(mainQuestion, editedQuestion)).then(() =>
+      dispatch(getQuestions(sessionUser.id))
+    );
+  };
+
   return (
     <>
       <h1>Coina</h1>
       <input onChange={e => setNewQuestion(e.target.value)}></input>
       <button onClick={submitQuestion}>submit question</button>
       {userQuestions
-        ? Object.values(userQuestions).map(question => (
-            <div>
-              {question.question}
-              <button>delete</button>
-              <button>edit</button>
+        ? Object.values(userQuestions).map(obj => (
+            <div onClick={e => setMainQuestion(obj.id)}>
+              {obj.question}
+              <button onClick={questionDeleter} hidden={mainQuestion != obj.id}>
+                delete
+              </button>
+              <button onClick={questionEditor} hidden={mainQuestion != obj.id}>
+                edit
+              </button>
+              <input
+                onChange={e => setEditedQuestion(e.target.value)}
+                hidden={mainQuestion != obj.id}
+              ></input>
             </div>
           ))
         : null}
