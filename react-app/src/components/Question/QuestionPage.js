@@ -10,6 +10,13 @@ import {
   editQuestion,
 } from "../../store/question";
 
+import {
+  deleteAnswer,
+  addNewAnswer,
+  editAnswer,
+  getAnswers,
+} from "../../store/answer";
+
 function QuestionPage({ question }) {
   const sessionUser = useSelector(state => state.session.user);
   const userQuestions = useSelector(state => state.questions);
@@ -19,11 +26,37 @@ function QuestionPage({ question }) {
 
   const [newAnswer, setNewAnswer] = useState("");
   const [openAnswer, setOpenAnswer] = useState(true);
-  const [editedQuestion, setEditedQuestion] = useState("");
+  const [mainAnswer, setMainAnswer] = useState("");
+  const [editedAnswer, setEditedAnswer] = useState("");
 
   useEffect(async () => {
     dispatch(getQuestions(sessionUser.id));
   }, [dispatch]);
+
+  const submitAnswer = async e => {
+    e.preventDefault();
+    if (!sessionUser) return;
+    dispatch(addNewAnswer(newAnswer, sessionUser.id, +params.questionId));
+    // dispatch(addNewAnswer(newAnswer, sessionUser.id, params.questionId)).then(
+    //   () => dispatch(getAnswers(sessionUser.id))
+    // );
+  };
+
+  const answerDeleter = async e => {
+    e.preventDefault();
+    if (!sessionUser) return;
+    dispatch(deleteAnswer(mainAnswer)).then(() =>
+      dispatch(getAnswers(sessionUser.id))
+    );
+  };
+
+  const answerEditor = async e => {
+    e.preventDefault();
+    if (!sessionUser) return;
+    await dispatch(editAnswer(mainAnswer, editedAnswer)).then(() =>
+      dispatch(getAnswers(sessionUser.id))
+    );
+  };
 
   const answerOpener = () => setOpenAnswer(!openAnswer);
 
@@ -34,8 +67,8 @@ function QuestionPage({ question }) {
           <h1>{userQuestions[params.questionId].question}</h1>
           <button onClick={answerOpener}>answer</button>
           <div hidden={openAnswer}>
-            <textarea></textarea>
-            <button>submit answer</button>
+            <textarea onChange={e => setNewAnswer(e.target.value)}></textarea>
+            <button onClick={submitAnswer}>submit answer</button>
           </div>
         </div>
       ) : (
