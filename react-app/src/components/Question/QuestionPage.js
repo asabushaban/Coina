@@ -17,43 +17,30 @@ function QuestionPage({ question }) {
   const dispatch = useDispatch();
   const params = useParams();
 
-  const [newQuestion, setNewQuestion] = useState("");
-  const [mainQuestion, setMainQuestion] = useState(4);
+  const [newAnswer, setNewAnswer] = useState("");
+  const [openAnswer, setOpenAnswer] = useState(true);
   const [editedQuestion, setEditedQuestion] = useState("");
 
   useEffect(async () => {
     dispatch(getQuestions(sessionUser.id));
   }, [dispatch]);
 
-  const submitQuestion = async e => {
-    e.preventDefault();
-    if (!sessionUser) return;
-    dispatch(addNewQuestion(newQuestion, sessionUser.id)).then(() =>
-      dispatch(getQuestions(sessionUser.id))
-    );
-  };
-
-  const questionDeleter = async e => {
-    e.preventDefault();
-    if (!sessionUser) return;
-    dispatch(deleteQuestion(mainQuestion)).then(() =>
-      dispatch(getQuestions(sessionUser.id))
-    );
-  };
-
-  const questionEditor = async e => {
-    e.preventDefault();
-    if (!sessionUser) return;
-    await dispatch(editQuestion(mainQuestion, editedQuestion)).then(() =>
-      dispatch(getQuestions(sessionUser.id))
-    );
-  };
+  const answerOpener = () => setOpenAnswer(!openAnswer);
 
   return (
     <>
-      <div id="mainHomeContainer">
-        <h1>{userQuestions[params.questionId].question}</h1>
-      </div>
+      {userQuestions[params.questionId] ? (
+        <div>
+          <h1>{userQuestions[params.questionId].question}</h1>
+          <button onClick={answerOpener}>answer</button>
+          <div hidden={openAnswer}>
+            <textarea></textarea>
+            <button>submit answer</button>
+          </div>
+        </div>
+      ) : (
+        <p>loading...</p>
+      )}
     </>
   );
 }

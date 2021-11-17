@@ -82,7 +82,9 @@ function HomePage() {
                   onChange={e => setEditedQuestion(e.target.value)}
                   hidden={mainQuestion != obj.id}
                 ></input>
-                <button>answer</button>
+                <div>
+                  <button>comment</button>
+                </div>
               </div>
             ))
           : null}
