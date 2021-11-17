@@ -12,6 +12,7 @@ import {
 function HomePage() {
   const sessionUser = useSelector(state => state.session.user);
   const userQuestions = useSelector(state => state.questions);
+  const allAnswers = useSelector(state => state.answers);
 
   const dispatch = useDispatch();
 
