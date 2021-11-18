@@ -56,6 +56,7 @@ def user_questions(id):
     for question in Question.query.filter(Question.user_id==user.id):
         questions[question.id] = question.to_dict()
         questions[question.id]["upVotes"] = len(UpVoteQuestion.query.filter(UpVoteQuestion.question_id==question.id).all())
+        questions[question.id]["username"] = user.username
     return questions
 
 

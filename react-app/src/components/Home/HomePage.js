@@ -17,7 +17,7 @@ function HomePage() {
   const dispatch = useDispatch();
 
   const [newQuestion, setNewQuestion] = useState("");
-  const [mainQuestion, setMainQuestion] = useState(4);
+  const [mainQuestionId, setMainQuestionId] = useState("");
   const [editedQuestion, setEditedQuestion] = useState("");
 
   useEffect(async () => {
@@ -35,7 +35,7 @@ function HomePage() {
   const questionDeleter = async e => {
     e.preventDefault();
     if (!sessionUser) return;
-    dispatch(deleteQuestion(mainQuestion)).then(() =>
+    dispatch(deleteQuestion(mainQuestionId)).then(() =>
       dispatch(getQuestions(sessionUser.id))
     );
   };
@@ -43,7 +43,7 @@ function HomePage() {
   const questionEditor = async e => {
     e.preventDefault();
     if (!sessionUser) return;
-    await dispatch(editQuestion(mainQuestion, editedQuestion)).then(() =>
+    await dispatch(editQuestion(mainQuestionId, editedQuestion)).then(() =>
       dispatch(getQuestions(sessionUser.id))
     );
   };
@@ -54,7 +54,10 @@ function HomePage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ question: mainQuestion, user_id: sessionUser.id }),
+      body: JSON.stringify({
+        question: mainQuestionId,
+        user_id: sessionUser.id,
+      }),
     }).then(() => dispatch(getQuestions(sessionUser.id)));
   };
 
@@ -68,8 +71,9 @@ function HomePage() {
           ? Object.values(userQuestions).map(obj => (
               <div
                 className="questionContainter"
-                onClick={e => setMainQuestion(obj.id)}
+                onClick={e => setMainQuestionId(obj.id)}
               >
+                <p style={{ fontSize: "8pt" }}>posted by: {obj.username}</p>
                 <Link
                   className="questionLink"
                   to={`/question/${obj.id}`}
@@ -80,22 +84,22 @@ function HomePage() {
                 <p>upvotes:{obj.upVotes}</p>
                 <button
                   onClick={questionDeleter}
-                  hidden={mainQuestion != obj.id}
+                  hidden={mainQuestionId != obj.id}
                 >
                   delete
                 </button>
                 <button
                   onClick={questionEditor}
-                  hidden={mainQuestion != obj.id}
+                  hidden={mainQuestionId != obj.id}
                 >
                   edit
                 </button>
                 <input
                   onChange={e => setEditedQuestion(e.target.value)}
-                  hidden={mainQuestion != obj.id}
+                  hidden={mainQuestionId != obj.id}
                 ></input>
                 <div>
-                  <button onClick={addUpVote} hidden={mainQuestion != obj.id}>
+                  <button onClick={addUpVote} hidden={mainQuestionId != obj.id}>
                     upvote
                   </button>
                 </div>
