@@ -16,7 +16,9 @@ def add_upvote():
     question, user_id = itemgetter("question", "user_id")(request.json)
     existing_upvote = UpVoteQuestion.query.filter(UpVoteQuestion.user_id==user_id).filter(UpVoteQuestion.question_id==question)
     if existing_upvote.one_or_none():
-        return "already upvoted"
+        db.session.delete(existing_upvote.one_or_none())
+        db.session.commit()
+        return "upVote removed"
     upVote = UpVoteQuestion(user_id=user_id, question_id=question)
     db.session.add(upVote)
     db.session.commit()
@@ -66,7 +68,7 @@ def delete_questions(id):
     db.session.commit()
     return {"delete": "success"}
 
-# delete a question (delete)
+# edits a question (delete)
 @questions_routes.route('/<int:id>', methods=["PUT"])
 @login_required
 def edit_questions(id):
