@@ -20,6 +20,8 @@ function Profile() {
   const [mainQuestionId, setMainQuestionId] = useState("");
   const [editedQuestion, setEditedQuestion] = useState("");
   const [user, setUser] = useState({});
+  const [follows, setFollows] = useState("");
+  console.log(follows);
 
   useEffect(async () => {
     dispatch(getQuestions(userId));
@@ -33,6 +35,17 @@ function Profile() {
       const response = await fetch(`/api/users/${userId}`);
       const user = await response.json();
       setUser(user);
+    })();
+  }, [userId]);
+
+  useEffect(() => {
+    if (!userId) {
+      return;
+    }
+    (async () => {
+      const response = await fetch(`/api/users/follows/${userId}`);
+      const follows = await response.json();
+      setFollows(follows);
     })();
   }, [userId]);
 
@@ -77,10 +90,32 @@ function Profile() {
     }).then(() => dispatch(getQuestions(userId)));
   };
 
+  const addFollow = async () => {
+    const response = await fetch(`/api/users/addfollow`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        followed: userId,
+        follower: sessionUser.id,
+      }),
+    });
+    const newFollows = await response.json();
+    setFollows(newFollows);
+  };
+
   return (
     <>
       <div id="mainHomeContainer">
         <h1>{user.username}</h1>
+        <button onClick={addFollow}>follow</button>
+        {follows ? (
+          <div>
+            <p>following:{follows.totalFollowing}</p>
+            <p>followers:{follows.totalFollowers}</p>
+          </div>
+        ) : null}
         <h2>My Questions:</h2>
         {userQuestions
           ? Object.values(userQuestions).map(obj => (

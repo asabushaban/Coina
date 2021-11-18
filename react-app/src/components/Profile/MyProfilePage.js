@@ -18,6 +18,19 @@ function MyProfile() {
   const [newQuestion, setNewQuestion] = useState("");
   const [mainQuestionId, setMainQuestionId] = useState("");
   const [editedQuestion, setEditedQuestion] = useState("");
+  const [follows, setFollows] = useState("");
+  console.log(follows);
+
+  useEffect(() => {
+    if (!sessionUser.id) {
+      return;
+    }
+    (async () => {
+      const response = await fetch(`/api/users/follows/${sessionUser.id}`);
+      const follows = await response.json();
+      setFollows(follows);
+    })();
+  }, []);
 
   useEffect(async () => {
     dispatch(getQuestions(sessionUser.id));
@@ -64,6 +77,12 @@ function MyProfile() {
     <>
       <div id="mainHomeContainer">
         <h1>{sessionUser.username}</h1>
+        {follows ? (
+          <div>
+            <p>following:{follows.totalFollowing}</p>
+            <p>followers:{follows.totalFollowers}</p>
+          </div>
+        ) : null}
         <h2>My Questions:</h2>
         {userQuestions
           ? Object.values(userQuestions).map(obj => (
