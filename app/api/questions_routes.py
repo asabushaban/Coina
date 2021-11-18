@@ -3,10 +3,26 @@ from flask import Blueprint, request
 from operator import itemgetter
 from app.forms import QuestionForm
 from datetime import date, datetime, timedelta
-from app.models import User, db, Question
+from app.models import User, db, Question, UpVoteAnswer, UpVoteQuestion
 
 questions_routes = Blueprint('questions', __name__)
 today = datetime.now()
+
+
+#add an upvote to a question
+@questions_routes.route('/addupvote', methods=["POST"])
+@login_required
+def add_upvote():
+    question, user_id = itemgetter("question", "user_id")(request.json)
+    existing_upvote = UpVoteQuestion.query.filter(UpVoteQuestion.user_id==user_id).filter(UpVoteQuestion.question_id==question)
+    if existing_upvote.one_or_none():
+        return "already upvoted"
+    upVote = UpVoteQuestion(user_id=user_id, question_id=question)
+    db.session.add(upVote)
+    db.session.commit()
+    return "success"
+
+
 
 # add a question (create)
 @questions_routes.route('/add', methods=["POST"])
@@ -34,7 +50,14 @@ def add_question():
 @login_required
 def user_questions(id):
     user = User.query.get(id)
-    return {question.id:question.to_dict() for question in Question.query.filter(Question.user_id==user.id)}
+
+    questions = {}
+    for question in Question.query.filter(Question.user_id==user.id):
+        questions[question.id] = question.to_dict()
+        if UpVoteQuestion.query.filter(UpVoteQuestion.question_id==question.id).one_or_none():
+            questions["upVotes"] = UpVoteQuestion.query.filter(UpVoteQuestion.question_id==question.id).all()
+    print("=============", questions)
+    return questions
 
 # delete a question (delete)
 @questions_routes.route('/<int:id>', methods=["DELETE"])

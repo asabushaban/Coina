@@ -1,7 +1,7 @@
 from datetime import timezone
 from .db import db
 from sqlalchemy.orm import relationship
-from app.models.user import upVote_question
+# from app.models.user import upVote_question
 
 class Question(db.Model):
     __tablename__ = 'questions'
@@ -16,9 +16,9 @@ class Question(db.Model):
     user = relationship("User", back_populates="questions")
     answers = relationship("Answer", back_populates="questions")
 
-    votes = relationship("User",
-                            secondary=upVote_question,
-                            back_populates="questions")
+    # votes = relationship("User",
+    #                         secondary=upVote_question,
+    #                         back_populates="questions")
 
     def to_dict(self):
         return {

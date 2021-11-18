@@ -48,7 +48,7 @@ function HomePage() {
     );
   };
 
-  const addUpVote = () => async dispatch => {
+  const addUpVote = async () => {
     const res = await fetch(`/api/questions/addupvote`, {
       method: "POST",
       headers: {
@@ -57,10 +57,10 @@ function HomePage() {
       body: JSON.stringify({ question: mainQuestion, user_id: sessionUser.id }),
     });
 
-    // if (res.ok) {
-    //   const data = await res.json();
-    //   dispatch(addQuestion(data));
-    // }
+    if (res.ok) {
+      const data = await res.json();
+      dispatch(getQuestions(sessionUser.id));
+    }
   };
 
   return (
@@ -99,7 +99,9 @@ function HomePage() {
                   hidden={mainQuestion != obj.id}
                 ></input>
                 <div>
-                  <button hidden={mainQuestion != obj.id}>upvote</button>
+                  <button onClick={addUpVote} hidden={mainQuestion != obj.id}>
+                    upvote
+                  </button>
                 </div>
               </div>
             ))
