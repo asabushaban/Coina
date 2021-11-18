@@ -50,14 +50,12 @@ def add_question():
 @login_required
 def user_questions(id):
     user = User.query.get(id)
-
     questions = {}
     for question in Question.query.filter(Question.user_id==user.id):
         questions[question.id] = question.to_dict()
-        if UpVoteQuestion.query.filter(UpVoteQuestion.question_id==question.id).one_or_none():
-            questions["upVotes"] = UpVoteQuestion.query.filter(UpVoteQuestion.question_id==question.id).all()
-    print("=============", questions)
+        questions[question.id]["upVotes"] = len(UpVoteQuestion.query.filter(UpVoteQuestion.question_id==question.id).all())
     return questions
+
 
 # delete a question (delete)
 @questions_routes.route('/<int:id>', methods=["DELETE"])
