@@ -23,13 +23,13 @@ function Profile() {
     dispatch(getQuestions(sessionUser.id));
   }, [dispatch]);
 
-  const submitQuestion = async e => {
-    e.preventDefault();
-    if (!sessionUser) return;
-    dispatch(addNewQuestion(newQuestion, sessionUser.id)).then(() =>
-      dispatch(getQuestions(sessionUser.id))
-    );
-  };
+  // const submitQuestion = async e => {
+  //   e.preventDefault();
+  //   if (!sessionUser) return;
+  //   dispatch(addNewQuestion(newQuestion, sessionUser.id)).then(() =>
+  //     dispatch(getQuestions(sessionUser.id))
+  //   );
+  // };
 
   const questionDeleter = async e => {
     e.preventDefault();
@@ -63,9 +63,8 @@ function Profile() {
   return (
     <>
       <div id="mainHomeContainer">
-        <h1>Coina</h1>
-        <input onChange={e => setNewQuestion(e.target.value)}></input>
-        <button onClick={submitQuestion}>submit question</button>
+        <h1>{sessionUser.username}</h1>
+        <h2>My Questions:</h2>
         {userQuestions
           ? Object.values(userQuestions).map(obj => (
               <div
