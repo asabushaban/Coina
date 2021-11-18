@@ -7,6 +7,9 @@ const LOAD_ANSWER = "ANSWERS/LOAD";
 //remove a ANSWER
 const REMOVE_ANSWER = "ANSWERS/REMOVE";
 
+//logout session
+const REMOVE_USER = "session/REMOVE_USER";
+
 const initialState = {};
 
 const addAnswer = answer => ({
@@ -117,6 +120,9 @@ export default function reducer(state = initialState, action) {
       const newState = { ...state };
       delete newState[action.id];
       return newState;
+    }
+    case REMOVE_USER: {
+      return {};
     }
     default:
       return state;

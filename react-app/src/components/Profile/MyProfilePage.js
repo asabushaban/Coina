@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   addNewQuestion,
   getQuestions,
@@ -8,43 +8,26 @@ import {
   editQuestion,
 } from "../../store/question";
 
-function Profile() {
+function MyProfile() {
   const sessionUser = useSelector(state => state.session.user);
   const userQuestions = useSelector(state => state.questions);
   const allAnswers = useSelector(state => state.answers);
 
   const dispatch = useDispatch();
-  const { userId } = useParams();
 
   const [newQuestion, setNewQuestion] = useState("");
   const [mainQuestionId, setMainQuestionId] = useState("");
   const [editedQuestion, setEditedQuestion] = useState("");
-  const [user, setUser] = useState({});
 
   useEffect(async () => {
-    dispatch(getQuestions(userId));
+    dispatch(getQuestions(sessionUser.id));
   }, [dispatch]);
-
-  useEffect(() => {
-    if (!userId) {
-      return;
-    }
-    (async () => {
-      const response = await fetch(`/api/users/${userId}`);
-      const user = await response.json();
-      setUser(user);
-    })();
-  }, [userId]);
-
-  if (!user) {
-    return null;
-  }
 
   // const submitQuestion = async e => {
   //   e.preventDefault();
   //   if (!sessionUser) return;
-  //   dispatch(addNewQuestion(newQuestion, userId)).then(() =>
-  //     dispatch(getQuestions(userId))
+  //   dispatch(addNewQuestion(newQuestion, sessionUser.id)).then(() =>
+  //     dispatch(getQuestions(sessionUser.id))
   //   );
   // };
 
@@ -52,7 +35,7 @@ function Profile() {
     e.preventDefault();
     if (!sessionUser) return;
     dispatch(deleteQuestion(mainQuestionId)).then(() =>
-      dispatch(getQuestions(userId))
+      dispatch(getQuestions(sessionUser.id))
     );
   };
 
@@ -60,7 +43,7 @@ function Profile() {
     e.preventDefault();
     if (!sessionUser) return;
     await dispatch(editQuestion(mainQuestionId, editedQuestion)).then(() =>
-      dispatch(getQuestions(userId))
+      dispatch(getQuestions(sessionUser.id))
     );
   };
 
@@ -74,13 +57,13 @@ function Profile() {
         question: mainQuestionId,
         user_id: sessionUser.id,
       }),
-    }).then(() => dispatch(getQuestions(userId)));
+    }).then(() => dispatch(getQuestions(sessionUser.id)));
   };
 
   return (
     <>
       <div id="mainHomeContainer">
-        <h1>{user.username}</h1>
+        <h1>{sessionUser.username}</h1>
         <h2>My Questions:</h2>
         {userQuestions
           ? Object.values(userQuestions).map(obj => (
@@ -126,4 +109,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default MyProfile;
