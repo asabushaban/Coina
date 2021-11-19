@@ -4,6 +4,9 @@ const ADD_QUESTION = "questions/ADD";
 //get questions for one user
 const LOAD_QUESTION = "questions/LOAD";
 
+//get questions for one user
+const LOAD_FOLLOWS_QUESTION = "questions/LOAD_FOLLOWS";
+
 //remove a question
 const REMOVE_QUESTION = "questions/REMOVE";
 
@@ -19,6 +22,11 @@ const addQuestion = question => ({
 
 const loadQuestion = questions => ({
   type: LOAD_QUESTION,
+  questions,
+});
+
+const loadFollowsQuestion = questions => ({
+  type: LOAD_FOLLOWS_QUESTION,
   questions,
 });
 
@@ -72,6 +80,31 @@ export const getQuestions = userId => async dispatch => {
   }
 };
 
+//get questions for everyone a user follows
+
+export const getFollowedQuestions = follows => async dispatch => {
+  const response = await fetch(`/api/questions/follows`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ follows }),
+  });
+
+  if (response.ok) {
+    const questions = await response.json();
+    dispatch(loadFollowsQuestion(questions));
+    return null;
+  } else if (response.status < 500) {
+    const data = await response.json();
+    if (data.errors) {
+      return data.errors;
+    }
+  } else {
+    return ["An error occurred. Please try again."];
+  }
+};
+
 //edit a question
 
 export const editQuestion = (id, question) => async dispatch => {
@@ -110,6 +143,12 @@ export default function reducer(state = initialState, action) {
       return {
         // ...state,
         ...newQuestions,
+      };
+    }
+    case LOAD_FOLLOWS_QUESTION: {
+      return {
+        // ...state,
+        ...action.questions,
       };
     }
     case REMOVE_QUESTION: {

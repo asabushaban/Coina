@@ -7,6 +7,7 @@ import {
   deleteQuestion,
   editQuestion,
 } from "../../store/question";
+import { authenticate } from "../../store/session";
 
 function Profile() {
   const sessionUser = useSelector(state => state.session.user);
@@ -21,7 +22,6 @@ function Profile() {
   const [editedQuestion, setEditedQuestion] = useState("");
   const [user, setUser] = useState({});
   const [follows, setFollows] = useState("");
-  console.log(follows);
 
   useEffect(async () => {
     dispatch(getQuestions(userId));
@@ -101,6 +101,7 @@ function Profile() {
         follower: sessionUser.id,
       }),
     });
+    await dispatch(authenticate());
     const newFollows = await response.json();
     setFollows(newFollows);
   };

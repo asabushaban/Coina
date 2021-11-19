@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import {
   addNewQuestion,
   getQuestions,
+  getFollowedQuestions,
   deleteQuestion,
   editQuestion,
 } from "../../store/question";
@@ -19,16 +20,17 @@ function HomePage() {
   const [newQuestion, setNewQuestion] = useState("");
   const [mainQuestionId, setMainQuestionId] = useState("");
   const [editedQuestion, setEditedQuestion] = useState("");
+  const [follows, setFollows] = useState("");
 
   useEffect(async () => {
-    dispatch(getQuestions(sessionUser.id));
+    dispatch(getFollowedQuestions(sessionUser.follows));
   }, [dispatch]);
 
   const submitQuestion = async e => {
     e.preventDefault();
     if (!sessionUser) return;
     dispatch(addNewQuestion(newQuestion, sessionUser.id)).then(() =>
-      dispatch(getQuestions(sessionUser.id))
+      dispatch(getFollowedQuestions(sessionUser.follows))
     );
   };
 
@@ -36,7 +38,7 @@ function HomePage() {
     e.preventDefault();
     if (!sessionUser) return;
     dispatch(deleteQuestion(mainQuestionId)).then(() =>
-      dispatch(getQuestions(sessionUser.id))
+      dispatch(getFollowedQuestions(sessionUser.follows))
     );
   };
 
@@ -44,7 +46,7 @@ function HomePage() {
     e.preventDefault();
     if (!sessionUser) return;
     await dispatch(editQuestion(mainQuestionId, editedQuestion)).then(() =>
-      dispatch(getQuestions(sessionUser.id))
+      dispatch(getFollowedQuestions(sessionUser.follows))
     );
   };
 
@@ -58,7 +60,7 @@ function HomePage() {
         question: mainQuestionId,
         user_id: sessionUser.id,
       }),
-    }).then(() => dispatch(getQuestions(sessionUser.id)));
+    }).then(() => dispatch(getFollowedQuestions(sessionUser.follows)));
   };
 
   return (
