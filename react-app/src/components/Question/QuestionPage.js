@@ -17,32 +17,48 @@ import {
   getAnswers,
 } from "../../store/answer";
 
-function QuestionPage({ question }) {
+function QuestionPage() {
   const sessionUser = useSelector(state => state.session.user);
   const userQuestions = useSelector(state => state.questions);
   const allAnswers = useSelector(state => state.answers);
   const dispatch = useDispatch();
-  const params = useParams();
+  const { questionId } = useParams();
 
   const answers = Object.values(allAnswers).filter(
-    answer => +answer.question_id === +params.questionId
+    answer => +answer.question_id === +questionId
   );
 
   const [newAnswer, setNewAnswer] = useState("");
   const [openAnswer, setOpenAnswer] = useState(true);
   const [mainAnswer, setMainAnswer] = useState("");
   const [editedAnswer, setEditedAnswer] = useState("");
+  const [question, setQuestion] = useState("");
 
   useEffect(async () => {
     await dispatch(getQuestions(sessionUser.id));
-    await dispatch(getAnswers(+params.questionId));
+    await dispatch(getAnswers(+questionId));
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!questionId) {
+      return;
+    }
+    (async () => {
+      const response = await fetch(`/api/questions/${questionId}`);
+      const question = await response.json();
+      setQuestion(question);
+    })();
+  }, [questionId]);
+
+  if (!questionId) {
+    return null;
+  }
 
   const submitAnswer = async e => {
     e.preventDefault();
     if (!sessionUser) return;
-    dispatch(addNewAnswer(newAnswer, sessionUser.id, +params.questionId));
-    // dispatch(addNewAnswer(newAnswer, sessionUser.id, params.questionId)).then(
+    dispatch(addNewAnswer(newAnswer, sessionUser.id, +questionId));
+    // dispatch(addNewAnswer(newAnswer, sessionUser.id, questionId)).then(
     //   () => dispatch(getAnswers(sessionUser.id))
     // );
   };
@@ -51,7 +67,7 @@ function QuestionPage({ question }) {
     e.preventDefault();
     if (!sessionUser) return;
     dispatch(deleteAnswer(mainAnswer)).then(() =>
-      dispatch(getAnswers(+params.questionId))
+      dispatch(getAnswers(+questionId))
     );
   };
 
@@ -59,7 +75,7 @@ function QuestionPage({ question }) {
     e.preventDefault();
     if (!sessionUser) return;
     await dispatch(editAnswer(mainAnswer, editedAnswer)).then(() =>
-      dispatch(getAnswers(+params.questionId))
+      dispatch(getAnswers(+questionId))
     );
   };
 
@@ -67,9 +83,9 @@ function QuestionPage({ question }) {
 
   return (
     <>
-      {userQuestions[params.questionId] ? (
+      {question ? (
         <div>
-          <h1>{userQuestions[params.questionId].question}</h1>
+          <h1>{question.question}</h1>
           <button onClick={answerOpener}>answer</button>
           <div hidden={openAnswer}>
             <textarea onChange={e => setNewAnswer(e.target.value)}></textarea>

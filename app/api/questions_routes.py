@@ -53,11 +53,19 @@ def add_question():
 def user_questions(id):
     user = User.query.get(id)
     questions = {}
+    print("one users qs========================", Question.query.filter(Question.user_id==user.id).all())
     for question in Question.query.filter(Question.user_id==user.id):
         questions[question.id] = question.to_dict()
         questions[question.id]["upVotes"] = len(UpVoteQuestion.query.filter(UpVoteQuestion.question_id==question.id).all())
+        questions[question.id]["username"] = user.username
     return questions
 
+# get one question (read)
+@questions_routes.route('/<int:id>')
+@login_required
+def get_question(id):
+    question = Question.query.get(id)
+    return question.to_dict()
 
 # delete a question (delete)
 @questions_routes.route('/<int:id>', methods=["DELETE"])

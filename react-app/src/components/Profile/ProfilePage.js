@@ -1,7 +1,6 @@
-import "./HomePage.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   addNewQuestion,
   getQuestions,
@@ -9,34 +8,64 @@ import {
   editQuestion,
 } from "../../store/question";
 
-function HomePage() {
+function Profile() {
   const sessionUser = useSelector(state => state.session.user);
   const userQuestions = useSelector(state => state.questions);
   const allAnswers = useSelector(state => state.answers);
 
   const dispatch = useDispatch();
+  const { userId } = useParams();
 
   const [newQuestion, setNewQuestion] = useState("");
   const [mainQuestionId, setMainQuestionId] = useState("");
   const [editedQuestion, setEditedQuestion] = useState("");
+  const [user, setUser] = useState({});
+  const [follows, setFollows] = useState("");
+  console.log(follows);
 
   useEffect(async () => {
-    dispatch(getQuestions(sessionUser.id));
+    dispatch(getQuestions(userId));
   }, [dispatch]);
 
-  const submitQuestion = async e => {
-    e.preventDefault();
-    if (!sessionUser) return;
-    dispatch(addNewQuestion(newQuestion, sessionUser.id)).then(() =>
-      dispatch(getQuestions(sessionUser.id))
-    );
-  };
+  useEffect(() => {
+    if (!userId) {
+      return;
+    }
+    (async () => {
+      const response = await fetch(`/api/users/${userId}`);
+      const user = await response.json();
+      setUser(user);
+    })();
+  }, [userId]);
+
+  useEffect(() => {
+    if (!userId) {
+      return;
+    }
+    (async () => {
+      const response = await fetch(`/api/users/follows/${userId}`);
+      const follows = await response.json();
+      setFollows(follows);
+    })();
+  }, [userId]);
+
+  if (!user) {
+    return null;
+  }
+
+  // const submitQuestion = async e => {
+  //   e.preventDefault();
+  //   if (!sessionUser) return;
+  //   dispatch(addNewQuestion(newQuestion, userId)).then(() =>
+  //     dispatch(getQuestions(userId))
+  //   );
+  // };
 
   const questionDeleter = async e => {
     e.preventDefault();
     if (!sessionUser) return;
     dispatch(deleteQuestion(mainQuestionId)).then(() =>
-      dispatch(getQuestions(sessionUser.id))
+      dispatch(getQuestions(userId))
     );
   };
 
@@ -44,7 +73,7 @@ function HomePage() {
     e.preventDefault();
     if (!sessionUser) return;
     await dispatch(editQuestion(mainQuestionId, editedQuestion)).then(() =>
-      dispatch(getQuestions(sessionUser.id))
+      dispatch(getQuestions(userId))
     );
   };
 
@@ -58,15 +87,36 @@ function HomePage() {
         question: mainQuestionId,
         user_id: sessionUser.id,
       }),
-    }).then(() => dispatch(getQuestions(sessionUser.id)));
+    }).then(() => dispatch(getQuestions(userId)));
+  };
+
+  const addFollow = async () => {
+    const response = await fetch(`/api/users/addfollow`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        followed: userId,
+        follower: sessionUser.id,
+      }),
+    });
+    const newFollows = await response.json();
+    setFollows(newFollows);
   };
 
   return (
     <>
       <div id="mainHomeContainer">
-        <h1>Coina</h1>
-        <input onChange={e => setNewQuestion(e.target.value)}></input>
-        <button onClick={submitQuestion}>submit question</button>
+        <h1>{user.username}</h1>
+        <button onClick={addFollow}>follow</button>
+        {follows ? (
+          <div>
+            <p>following:{follows.totalFollowing}</p>
+            <p>followers:{follows.totalFollowers}</p>
+          </div>
+        ) : null}
+        <h2>My Questions:</h2>
         {userQuestions
           ? Object.values(userQuestions).map(obj => (
               <div
@@ -111,55 +161,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
-
-let obj = {
-  23: {
-    id: 23,
-    question: "What is water?",
-    user_id: 2,
-    created_at: "11-16-2021 07:27 PM",
-    updated_at: "11-16-2021 07:27 PM",
-    upVotes: 0,
-  },
-  5: {
-    id: 5,
-    question: "What is the sky?",
-    user_id: 2,
-    created_at: "11-16-2021 04:04 PM",
-    updated_at: "11-16-2021 04:04 PM",
-    upVotes: 1,
-  },
-  26: {
-    id: 26,
-    question: "This is a test. How does this work?",
-    user_id: 2,
-    created_at: "11-17-2021 08:43 AM",
-    updated_at: "11-17-2021 08:43 AM",
-    upVotes: 0,
-  },
-  22: {
-    id: 22,
-    question: "What's 5 + 5?",
-    user_id: 2,
-    created_at: "11-16-2021 07:27 PM",
-    updated_at: "11-16-2021 07:27 PM",
-    upVotes: 0,
-  },
-  8: {
-    id: 8,
-    question: "How much is this thing?",
-    user_id: 2,
-    created_at: "11-16-2021 04:24 PM",
-    updated_at: "11-16-2021 04:24 PM",
-    upVotes: 1,
-  },
-  6: {
-    id: 6,
-    question: "What's that smell?",
-    user_id: 2,
-    created_at: "11-16-2021 04:13 PM",
-    updated_at: "11-16-2021 04:13 PM",
-    upVotes: 1,
-  },
-};
+export default Profile;
