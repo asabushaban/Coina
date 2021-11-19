@@ -1,11 +1,9 @@
-from sqlalchemy.sql.elements import Null
-from app.models import db, Question, question
+from app.models import db, Question
 from datetime import date, datetime, timedelta
 from random import randint
 today = datetime.now()
 
 
-# Adds a follow data
 def seed_questions():
     db.session.add(Question(question="What's the most exiciting project in crypto?", body="seed", user_id=1, created_at=today, updated_at=today))
     db.session.add(Question(question="What's the big deal with NFTs? Are they all hype?", body="seed", user_id=2, created_at=today, updated_at=today))
