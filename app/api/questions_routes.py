@@ -47,17 +47,33 @@ def add_question():
         return None
 
 
-# get a users questions (read)
-@questions_routes.route('/myquestions/<int:id>')
-@login_required
-def user_questions(id):
+def question_getter(id):
     user = User.query.get(id)
     questions = {}
-    print("one users qs========================", Question.query.filter(Question.user_id==user.id).all())
+    # print("one users qs========================", Question.query.filter(Question.user_id==user.id).all())
+    # print("all qs==============================", Question.query.all())
     for question in Question.query.filter(Question.user_id==user.id):
         questions[question.id] = question.to_dict()
         questions[question.id]["upVotes"] = len(UpVoteQuestion.query.filter(UpVoteQuestion.question_id==question.id).all())
         questions[question.id]["username"] = user.username
+    return questions
+
+
+# get a users questions (read)
+@questions_routes.route('/myquestions/<int:id>')
+@login_required
+def user_questions(id):
+    return question_getter(id)
+
+# get users follow questions (read)
+@questions_routes.route('/follows', methods=["PUT"])
+@login_required
+def user_follow_questions():
+    questions = {}
+    follows = itemgetter("follows")(request.json)
+    for id in follows.keys():
+        for qId, q in question_getter(id).items():
+            questions[qId] = q
     return questions
 
 # get one question (read)

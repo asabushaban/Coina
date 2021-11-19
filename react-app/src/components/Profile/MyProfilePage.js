@@ -19,7 +19,6 @@ function MyProfile() {
   const [mainQuestionId, setMainQuestionId] = useState("");
   const [editedQuestion, setEditedQuestion] = useState("");
   const [follows, setFollows] = useState("");
-  console.log(follows);
 
   useEffect(() => {
     if (!sessionUser.id) {
