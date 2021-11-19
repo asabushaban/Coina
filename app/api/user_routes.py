@@ -50,10 +50,8 @@ def add_follow():
     db.session.commit()
     return follow_getter(followed)
 
-"""code below just in case
-refactored code has a bug"""
-
-"dog"
+# code below just in case
+# refactored code has a bug
 
 # @user_routes.route('/addfollow', methods=["POST"])
 # @login_required

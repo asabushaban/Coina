@@ -60,6 +60,12 @@ def user_questions(id):
         questions[question.id]["username"] = user.username
     return questions
 
+# get one question (read)
+@questions_routes.route('/<int:id>')
+@login_required
+def get_question(id):
+    question = Question.query.get(id)
+    return question.to_dict()
 
 # delete a question (delete)
 @questions_routes.route('/<int:id>', methods=["DELETE"])
