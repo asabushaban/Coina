@@ -109,7 +109,9 @@ function Profile() {
     <>
       <div id="mainHomeContainer">
         <h1>{user.username}</h1>
-        <button onClick={addFollow}>follow</button>
+        {userId != sessionUser.id ? (
+          <button onClick={addFollow}>follow</button>
+        ) : null}
         {follows ? (
           <div>
             <p>following:{follows.totalFollowing}</p>

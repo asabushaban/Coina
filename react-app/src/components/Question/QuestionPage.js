@@ -2,14 +2,7 @@ import "./QuestionPage.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-
-import {
-  addNewQuestion,
-  getQuestions,
-  deleteQuestion,
-  editQuestion,
-} from "../../store/question";
-
+import { getQuestions } from "../../store/question";
 import {
   deleteAnswer,
   addNewAnswer,
@@ -19,7 +12,6 @@ import {
 
 function QuestionPage() {
   const sessionUser = useSelector(state => state.session.user);
-  const userQuestions = useSelector(state => state.questions);
   const allAnswers = useSelector(state => state.answers);
   const dispatch = useDispatch();
   const { questionId } = useParams();
@@ -99,14 +91,20 @@ function QuestionPage() {
         answers.map(answer => (
           <div onClick={e => setMainAnswer(answer.id)}>
             <p>{answer.body}</p>
-            <button hidden={mainAnswer != answer.id} onClick={answerDeleter}>
+            <button
+              hidden={sessionUser.id != answer.user_id}
+              onClick={answerDeleter}
+            >
               delete
             </button>
-            <button hidden={mainAnswer != answer.id} onClick={answerEditor}>
+            <button
+              hidden={sessionUser.id != answer.user_id}
+              onClick={answerEditor}
+            >
               edit
             </button>
             <input
-              hidden={mainAnswer != answer.id}
+              hidden={sessionUser.id != answer.user_id}
               onChange={e => setEditedAnswer(e.target.value)}
             ></input>
           </div>
