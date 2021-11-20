@@ -83,6 +83,9 @@ function HomePage() {
                 >
                   {obj.question}
                 </Link>
+                <p style={{ fontSize: "10pt" }}>
+                  {obj.topAnswer ? obj.topAnswer.body : null}
+                </p>
                 <p>upvotes:{obj.upVotes}</p>
                 <button
                   onClick={questionDeleter}

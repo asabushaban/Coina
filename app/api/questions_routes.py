@@ -3,7 +3,7 @@ from flask import Blueprint, request
 from operator import itemgetter
 from app.forms import QuestionForm
 from datetime import date, datetime, timedelta
-from app.models import User, db, Question, UpVoteAnswer, UpVoteQuestion
+from app.models import User, db, Question, UpVoteAnswer, UpVoteQuestion, Answer
 
 questions_routes = Blueprint('questions', __name__)
 today = datetime.now()
@@ -56,6 +56,8 @@ def question_getter(id):
         questions[question.id] = question.to_dict()
         questions[question.id]["upVotes"] = len(UpVoteQuestion.query.filter(UpVoteQuestion.question_id==question.id).all())
         questions[question.id]["username"] = user.username
+        if Answer.query.filter(Answer.question_id == question.id).first():
+            questions[question.id]["topAnswer"] = Answer.query.filter(Answer.question_id == question.id).first().to_dict()
     return questions
 
 
