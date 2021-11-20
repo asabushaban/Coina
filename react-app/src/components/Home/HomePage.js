@@ -83,28 +83,33 @@ function HomePage() {
                 >
                   {obj.question}
                 </Link>
-                <p>upvotes:{obj.upVotes}</p>
-                <button
-                  onClick={questionDeleter}
-                  hidden={mainQuestionId != obj.id}
-                >
-                  delete
-                </button>
-                <button
-                  onClick={questionEditor}
-                  hidden={mainQuestionId != obj.id}
-                >
-                  edit
-                </button>
-                <input
-                  onChange={e => setEditedQuestion(e.target.value)}
-                  hidden={mainQuestionId != obj.id}
-                ></input>
+                <p style={{ fontSize: "10pt" }}>
+                  {obj.topAnswer
+                    ? `${obj.topAnswer.body} - ${obj.topAnswer.username}`
+                    : "Answer this question.."}
+                </p>
+                <p>{obj.upVotes}</p>
                 <div>
                   <button onClick={addUpVote} hidden={mainQuestionId != obj.id}>
                     upvote
                   </button>
                 </div>
+                <button
+                  onClick={questionDeleter}
+                  hidden={sessionUser.id != obj.id}
+                >
+                  delete
+                </button>
+                <button
+                  onClick={questionEditor}
+                  hidden={sessionUser.id != obj.id}
+                >
+                  edit
+                </button>
+                <input
+                  onChange={e => setEditedQuestion(e.target.value)}
+                  hidden={sessionUser.id != obj.id}
+                ></input>
               </div>
             ))
           : null}

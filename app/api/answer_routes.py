@@ -3,10 +3,27 @@ from flask import Blueprint, request
 from operator import itemgetter
 from app.forms import AnswerForm
 from datetime import date, datetime, timedelta
-from app.models import User, db, Answer, Question, question
+from app.models import User, db, Answer, Question, UpVoteAnswer
 
 answers_routes = Blueprint('answers', __name__)
 today = datetime.now()
+
+
+#add an upvote to a question
+@answers_routes.route('/addupvote', methods=["POST"])
+@login_required
+def add_upvote():
+    answer, user_id = itemgetter("answer", "user_id")(request.json)
+    existing_upvote = UpVoteAnswer.query.filter(UpVoteAnswer.user_id==user_id).filter(UpVoteAnswer.answer_id==answer)
+    if existing_upvote.one_or_none():
+        db.session.delete(existing_upvote.one_or_none())
+        db.session.commit()
+        return "upVote removed"
+    upVote = UpVoteAnswer(user_id=user_id, answer_id=answer)
+    db.session.add(upVote)
+    db.session.commit()
+    return "success"
+
 
 # add a question (create)
 @answers_routes.route('/add', methods=["POST"])
@@ -34,12 +51,15 @@ def add_question():
 @answers_routes.route('/<int:id>')
 @login_required
 def question_answers(id):
-    question = Question.query.get(id)
+    # question = Question.query.get(id)
     answers = {answer.id: answer.to_dict() for answer in Answer.query.filter(Answer.question_id==id)}
+    for ans in answers.values():
+        answers[ans["id"]]["username"] = User.query.get(ans['user_id']).to_dict()['username']
+        answers[ans["id"]]["upVotes"] = len(UpVoteAnswer.query.filter(UpVoteAnswer.answer_id==ans['id']).all())
     return answers
     # return {question.id:question.to_dict() for question in Question.query.filter(Question.user_id==user.id)}
 
-# delete a question (delete)
+# delete an answer (delete)
 @answers_routes.route('/<int:id>', methods=["DELETE"])
 @login_required
 def delete_answers(id):
@@ -48,7 +68,7 @@ def delete_answers(id):
     db.session.commit()
     return {"delete": "success"}
 
-# delete a question (delete)
+# edit an aswer (delete)
 @answers_routes.route('/<int:id>', methods=["PUT"])
 @login_required
 def edit_answers(id):
