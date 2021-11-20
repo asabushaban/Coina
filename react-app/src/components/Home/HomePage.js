@@ -84,24 +84,26 @@ function HomePage() {
                   {obj.question}
                 </Link>
                 <p style={{ fontSize: "10pt" }}>
-                  {obj.topAnswer ? obj.topAnswer.body : null}
+                  {obj.topAnswer
+                    ? `${obj.topAnswer.body} - ${obj.topAnswer.username}`
+                    : "Answer this question.."}
                 </p>
                 <p>upvotes:{obj.upVotes}</p>
                 <button
                   onClick={questionDeleter}
-                  hidden={mainQuestionId != obj.id}
+                  hidden={sessionUser.id != obj.id}
                 >
                   delete
                 </button>
                 <button
                   onClick={questionEditor}
-                  hidden={mainQuestionId != obj.id}
+                  hidden={sessionUser.id != obj.id}
                 >
                   edit
                 </button>
                 <input
                   onChange={e => setEditedQuestion(e.target.value)}
-                  hidden={mainQuestionId != obj.id}
+                  hidden={sessionUser.id != obj.id}
                 ></input>
                 <div>
                   <button onClick={addUpVote} hidden={mainQuestionId != obj.id}>

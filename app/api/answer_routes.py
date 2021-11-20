@@ -34,8 +34,10 @@ def add_question():
 @answers_routes.route('/<int:id>')
 @login_required
 def question_answers(id):
-    question = Question.query.get(id)
+    # question = Question.query.get(id)
     answers = {answer.id: answer.to_dict() for answer in Answer.query.filter(Answer.question_id==id)}
+    for ans in answers.values():
+        answers[ans["id"]]["username"] = User.query.get(ans['user_id']).to_dict()['username']
     return answers
     # return {question.id:question.to_dict() for question in Question.query.filter(Question.user_id==user.id)}
 

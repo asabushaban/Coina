@@ -57,7 +57,9 @@ def question_getter(id):
         questions[question.id]["upVotes"] = len(UpVoteQuestion.query.filter(UpVoteQuestion.question_id==question.id).all())
         questions[question.id]["username"] = user.username
         if Answer.query.filter(Answer.question_id == question.id).first():
-            questions[question.id]["topAnswer"] = Answer.query.filter(Answer.question_id == question.id).first().to_dict()
+            topAnswer = Answer.query.filter(Answer.question_id == question.id).first().to_dict()
+            topAnswer["username"] = User.query.get(topAnswer["user_id"]).to_dict()['username']
+            questions[question.id]["topAnswer"] = topAnswer
     return questions
 
 
