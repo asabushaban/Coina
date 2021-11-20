@@ -88,7 +88,12 @@ function HomePage() {
                     ? `${obj.topAnswer.body} - ${obj.topAnswer.username}`
                     : "Answer this question.."}
                 </p>
-                <p>upvotes:{obj.upVotes}</p>
+                <p>{obj.upVotes}</p>
+                <div>
+                  <button onClick={addUpVote} hidden={mainQuestionId != obj.id}>
+                    upvote
+                  </button>
+                </div>
                 <button
                   onClick={questionDeleter}
                   hidden={sessionUser.id != obj.id}
@@ -105,11 +110,6 @@ function HomePage() {
                   onChange={e => setEditedQuestion(e.target.value)}
                   hidden={sessionUser.id != obj.id}
                 ></input>
-                <div>
-                  <button onClick={addUpVote} hidden={mainQuestionId != obj.id}>
-                    upvote
-                  </button>
-                </div>
               </div>
             ))
           : null}

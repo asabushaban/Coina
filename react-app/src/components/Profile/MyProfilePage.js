@@ -102,7 +102,7 @@ function MyProfile() {
                     ? `${obj.topAnswer.body} - ${obj.topAnswer.username}`
                     : "Answer this question.."}
                 </p>
-                <p>upvotes:{obj.upVotes}</p>
+                <p>{obj.upVotes}</p>
                 <button
                   onClick={questionDeleter}
                   hidden={mainQuestionId != obj.id}

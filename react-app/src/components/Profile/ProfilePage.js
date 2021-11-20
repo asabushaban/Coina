@@ -90,20 +90,23 @@ function Profile() {
     }).then(() => dispatch(getQuestions(userId)));
   };
 
-  const addFollow = async () => {
+  const addFollow = async (id, profile) => {
     const response = await fetch(`/api/users/addfollow`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        followed: userId,
+        followed: id,
         follower: sessionUser.id,
       }),
     });
     await dispatch(authenticate());
-    const newFollows = await response.json();
-    setFollows(newFollows);
+    if (profile === "current") {
+      const newFollows = await response.json();
+      setFollows(newFollows);
+      return;
+    }
   };
 
   return (
@@ -111,7 +114,9 @@ function Profile() {
       <div id="mainHomeContainer">
         <h1>{user.username}</h1>
         {userId != sessionUser.id ? (
-          <button onClick={addFollow}>follow</button>
+          <button onClick={e => addFollow(userId, "current")}>
+            {sessionUser.follows[userId] ? `unfollow` : `follow`}
+          </button>
         ) : null}
         {follows ? (
           <div>
@@ -134,12 +139,33 @@ function Profile() {
                 >
                   {obj.question}
                 </Link>
-                <p style={{ fontSize: "10pt" }}>
-                  {obj.topAnswer
-                    ? `${obj.topAnswer.body} - ${obj.topAnswer.username}`
-                    : "Answer this question.."}
-                </p>
-                <p>upvotes:{obj.upVotes}</p>
+                {obj.topAnswer ? (
+                  <div>
+                    <p style={{ fontSize: "10pt" }}>
+                      {`${obj.topAnswer.body} - ${obj.topAnswer.username}`}
+                    </p>
+                    {sessionUser.follows[obj.topAnswer.user_id] ? (
+                      <button
+                        onClick={e =>
+                          addFollow(obj.topAnswer.user_id, "different")
+                        }
+                      >
+                        follow
+                      </button>
+                    ) : (
+                      <button
+                        onClick={e =>
+                          addFollow(obj.topAnswer.user_id, "different")
+                        }
+                      >
+                        unfollow
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <p> "Answer this question.."</p>
+                )}
+                <p>{obj.upVotes}</p>
                 <button
                   onClick={questionDeleter}
                   hidden={mainQuestionId != obj.id}
