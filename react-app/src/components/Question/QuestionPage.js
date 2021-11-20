@@ -22,7 +22,7 @@ function QuestionPage() {
 
   const [newAnswer, setNewAnswer] = useState("");
   const [openAnswer, setOpenAnswer] = useState(true);
-  const [mainAnswer, setMainAnswer] = useState("");
+  const [mainAnswerId, setMainAnswerId] = useState("");
   const [editedAnswer, setEditedAnswer] = useState("");
   const [question, setQuestion] = useState("");
 
@@ -58,7 +58,7 @@ function QuestionPage() {
   const answerDeleter = async e => {
     e.preventDefault();
     if (!sessionUser) return;
-    dispatch(deleteAnswer(mainAnswer)).then(() =>
+    dispatch(deleteAnswer(mainAnswerId)).then(() =>
       dispatch(getAnswers(+questionId))
     );
   };
@@ -66,9 +66,22 @@ function QuestionPage() {
   const answerEditor = async e => {
     e.preventDefault();
     if (!sessionUser) return;
-    await dispatch(editAnswer(mainAnswer, editedAnswer)).then(() =>
+    await dispatch(editAnswer(mainAnswerId, editedAnswer)).then(() =>
       dispatch(getAnswers(+questionId))
     );
+  };
+
+  const addUpVote = async () => {
+    await fetch(`/api/answers/addupvote`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        answer: mainAnswerId,
+        user_id: sessionUser.id,
+      }),
+    }).then(() => dispatch(getAnswers(+questionId)));
   };
 
   const answerOpener = () => setOpenAnswer(!openAnswer);
@@ -89,8 +102,17 @@ function QuestionPage() {
       )}
       {answers ? (
         answers.map(answer => (
-          <div onClick={e => setMainAnswer(answer.id)}>
+          <div
+            className="questionContainter"
+            onClick={e => setMainAnswerId(answer.id)}
+          >
             <p>{answer.body}</p>
+            <div>
+              <button onClick={addUpVote} hidden={mainAnswerId != answer.id}>
+                upvote
+              </button>
+            </div>
+            <p>{answer.upVotes}</p>
             <button
               hidden={sessionUser.id != answer.user_id}
               onClick={answerDeleter}

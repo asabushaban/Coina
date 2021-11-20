@@ -134,6 +134,11 @@ function Profile() {
                 >
                   {obj.question}
                 </Link>
+                <p style={{ fontSize: "10pt" }}>
+                  {obj.topAnswer
+                    ? `${obj.topAnswer.body} - ${obj.topAnswer.username}`
+                    : "Answer this question.."}
+                </p>
                 <p>upvotes:{obj.upVotes}</p>
                 <button
                   onClick={questionDeleter}
