@@ -20,18 +20,74 @@ html {
   background-color: rgb(255, 255, 255);
   border: 0.5px solid rgba(219, 217, 217, 0.6);
   width: 50%;
-  height: 150px;
+  height: 130px;
   margin-bottom: 20px;
   padding: 20px;
-  font-size: 16pt;
-  font-weight: 1000;
 }
 
 .questionLink {
+  font-size: 14pt;
   text-decoration: none;
+  font-weight: bolder;
   color: black;
 }
 
 .questionLink:hover {
   text-decoration: underline;
+}
+
+.topQuestion {
+  display: flex;
+  margin-bottom: 6px;
+}
+
+.questionAnswerer {
+  text-decoration: none;
+  color: black;
+  font-weight: 1000;
+  font-size: 10pt;
+  margin-right: 5px;
+}
+
+.questionFollow {
+  color: rgb(87, 87, 231);
+  font-size: 9pt;
+  margin: 0px;
+  margin-left: 5px;
+}
+
+.questionFollow:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.bottomQuestion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0px;
+}
+
+.bottomQuestionLeft {
+  display: flex;
+  align-items: center;
+  height: 35px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.bottomQuestionLeft:hover {
+  background-color: rgba(226, 226, 226, 0.6);
+}
+
+#upVotesNum {
+  color: rgb(160, 159, 159);
+  font-size: 10pt;
+  margin-left: 10px;
+}
+
+#upArrowImg {
+  cursor: pointer;
+  color: rgb(83, 85, 160);
 }

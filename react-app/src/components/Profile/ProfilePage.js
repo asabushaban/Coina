@@ -150,7 +150,7 @@ function Profile() {
                           addFollow(obj.topAnswer.user_id, "different")
                         }
                       >
-                        follow
+                        unfollow
                       </button>
                     ) : (
                       <button
@@ -158,7 +158,7 @@ function Profile() {
                           addFollow(obj.topAnswer.user_id, "different")
                         }
                       >
-                        unfollow
+                        follow
                       </button>
                     )}
                   </div>
