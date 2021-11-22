@@ -124,7 +124,7 @@ function Profile() {
             <p>followers:{follows.totalFollowers}</p>
           </div>
         ) : null}
-        <h2>My Questions:</h2>
+        <h2>{user.username} Questions:</h2>
         {userQuestions
           ? Object.values(userQuestions).map(obj => (
               <div
@@ -150,7 +150,7 @@ function Profile() {
                           addFollow(obj.topAnswer.user_id, "different")
                         }
                       >
-                        follow
+                        unfollow
                       </button>
                     ) : (
                       <button
@@ -158,7 +158,7 @@ function Profile() {
                           addFollow(obj.topAnswer.user_id, "different")
                         }
                       >
-                        unfollow
+                        follow
                       </button>
                     )}
                   </div>
