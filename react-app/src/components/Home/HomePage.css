@@ -16,6 +16,30 @@ html {
   align-items: center;
 }
 
+#askQuestionBox {
+  background-color: rgb(255, 255, 255);
+  border: 0.5px solid rgba(219, 217, 217, 0.6);
+  width: 50%;
+  height: 60px;
+  margin-bottom: 20px;
+  padding: 20px;
+  cursor: pointer;
+  box-shadow: 0.25px 0.25px 0.25px 0.25px rgba(190, 190, 190, 0.2);
+}
+
+#askQuestionBoxName {
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 11pt;
+  color: rgb(133, 131, 131);
+}
+
+#askQuestionBoxPrompt {
+  margin: 0;
+  font-size: 18pt;
+  color: rgb(133, 131, 131);
+}
+
 .questionContainter {
   background-color: rgb(255, 255, 255);
   border: 0.5px solid rgba(219, 217, 217, 0.6);
@@ -23,6 +47,7 @@ html {
   height: 130px;
   margin-bottom: 20px;
   padding: 20px;
+  box-shadow: 0.25px 0.25px 0.25px 0.25px rgba(190, 190, 190, 0.2);
 }
 
 .questionLink {
@@ -75,6 +100,7 @@ html {
   background-color: rgba(255, 255, 255, 0.6);
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
+  cursor: pointer;
 }
 
 .bottomQuestionLeft:hover {
@@ -82,12 +108,11 @@ html {
 }
 
 #upVotesNum {
-  color: rgb(160, 159, 159);
-  font-size: 10pt;
+  color: rgb(133, 131, 131);
+  font-size: 11pt;
   margin-left: 10px;
 }
 
 #upArrowImg {
-  cursor: pointer;
   color: rgb(83, 85, 160);
 }

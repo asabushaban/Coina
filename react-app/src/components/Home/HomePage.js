@@ -82,9 +82,16 @@ function HomePage() {
   return (
     <>
       <div id="mainHomeContainer">
-        <h1>Coina</h1>
+        {/* <h1>Coina</h1>
         <input onChange={e => setNewQuestion(e.target.value)}></input>
-        <button onClick={submitQuestion}>submit question</button>
+        <button onClick={submitQuestion}>submit question</button> */}
+        {sessionUser ? (
+          <div id={"askQuestionBox"}>
+            <p id={"askQuestionBoxName"}>{sessionUser.username}</p>
+            <p id={"askQuestionBoxPrompt"}>What is your question?</p>
+          </div>
+        ) : null}
+
         {userQuestions
           ? Object.values(userQuestions).map(obj => (
               <div
@@ -102,6 +109,7 @@ function HomePage() {
                         <p
                           className={"questionFollow"}
                           onClick={e => addFollow(obj.topAnswer.user_id)}
+                          style={{ color: "rgb(133, 131, 131)" }}
                         >
                           Following
                         </p>
@@ -141,12 +149,14 @@ function HomePage() {
                     </p>
                   </div>
                 ) : (
-                  <p> "Answer this question.."</p>
+                  <p> Answer this question..</p>
                 )}
                 <div className={"bottomQuestion"}>
-                  <div className={"bottomQuestionLeft"}>
+                  <div
+                    className={"bottomQuestionLeft"}
+                    onClick={e => addUpVote(obj.id)}
+                  >
                     <svg
-                      onClick={e => addUpVote(obj.id)}
                       id={"upArrowImg"}
                       width="24"
                       height="24"
