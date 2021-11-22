@@ -11,6 +11,7 @@ import {
 } from "../../store/question";
 import { authenticate } from "../../store/session";
 import arrow from "../trans-arrow.jpeg";
+import Modal from "../Modal/Modal";
 
 function HomePage() {
   const sessionUser = useSelector(state => state.session.user);
@@ -22,14 +23,14 @@ function HomePage() {
   const [newQuestion, setNewQuestion] = useState("");
   const [mainQuestionId, setMainQuestionId] = useState("");
   const [editedQuestion, setEditedQuestion] = useState("");
-  const [follows, setFollows] = useState("");
+  // const [follows, setFollows] = useState("");
+  const [modal, setModal] = useState(false);
 
   useEffect(async () => {
     dispatch(getFollowedQuestions(sessionUser.follows));
   }, [dispatch]);
 
   const submitQuestion = async e => {
-    e.preventDefault();
     if (!sessionUser) return;
     dispatch(addNewQuestion(newQuestion, sessionUser.id)).then(() =>
       dispatch(getFollowedQuestions(sessionUser.follows))
@@ -86,7 +87,7 @@ function HomePage() {
         <input onChange={e => setNewQuestion(e.target.value)}></input>
         <button onClick={submitQuestion}>submit question</button> */}
         {sessionUser ? (
-          <div id={"askQuestionBox"}>
+          <div id={"askQuestionBox"} onClick={e => setModal(true)}>
             <p id={"askQuestionBoxName"}>{sessionUser.username}</p>
             <p id={"askQuestionBoxPrompt"}>What is your question?</p>
           </div>
@@ -151,6 +152,37 @@ function HomePage() {
                 ) : (
                   <p> Answer this question..</p>
                 )}
+                <Modal
+                  title={`Add Question`}
+                  show={modal}
+                  onClose={() => setModal(false)}
+                >
+                  <div id={"askQuestionModal"}>
+                    <p id={"askQuestionName"}>{sessionUser.username}</p>
+                    <input
+                      id={"askQuestionInput"}
+                      placeholder={`Start your question with "What", "How", "Why", etc.`}
+                      onChange={e => setNewQuestion(e.target.value)}
+                    ></input>
+                    <div id={"askQuestionModalBottom"}>
+                      <p
+                        id={"askQuestionModalCancel"}
+                        onClick={() => setModal(false)}
+                      >
+                        Cancel
+                      </p>
+                      <button
+                        id={"askQuestionButton"}
+                        onClick={() => {
+                          submitQuestion();
+                          setModal(false);
+                        }}
+                      >
+                        Add question
+                      </button>
+                    </div>
+                  </div>
+                </Modal>
                 <div className={"bottomQuestion"}>
                   <div
                     className={"bottomQuestionLeft"}
