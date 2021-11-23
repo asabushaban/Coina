@@ -131,6 +131,7 @@ const NavBar = () => {
           {sessionUser ? (
             <>
               <NavLink
+                id={"myProfileLink"}
                 to={`/myprofile/${sessionUser.id}`}
                 exact={true}
                 activeClassName="active"
