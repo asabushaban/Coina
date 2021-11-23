@@ -19,11 +19,11 @@ Python | Flask | SQLAlchemy
 
 ![Alt Text](https://github.com/asabushaban/Coina/blob/main/react-app/public/wireframes/Home.png)
 
-####within each question container, users can upvote questions they like.
+within each question container, users can upvote questions they like.
 
-####within each question container, the highest voted answer will appear as the answer to the question.
+within each question container, the highest voted answer will appear as the answer to the question.
 
-####within each question container, users can follow or unfollow new users answered a question posted by someone they follow.
+within each question container, users can follow or unfollow new users answered a question posted by someone they follow.
 
 ![Alt Text](https://github.com/asabushaban/Coina/blob/main/react-app/public/wireframes/Answers.png)
 
