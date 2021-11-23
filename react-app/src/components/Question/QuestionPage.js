@@ -90,11 +90,51 @@ function QuestionPage() {
     <div id={`mainAnswerContainer`}>
       {question ? (
         <>
-          <h1 style={{ marginTop: "80px" }}>{question.question}</h1>
-          <button onClick={answerOpener}>answer</button>
-          <div hidden={openAnswer}>
-            <textarea onChange={e => setNewAnswer(e.target.value)}></textarea>
-            <button onClick={submitAnswer}>submit answer</button>
+          <h1 id={"answerHeading"}>{question.question}</h1>
+          <div id={"answerButton"} onClick={answerOpener}>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g stroke-width="1.5" fill="none" fill-rule="evenodd">
+                <path
+                  d="M18.571 5.429h0a2 2 0 0 1 0 2.828l-9.9 9.9-4.24 1.416 1.412-4.245 9.9-9.9h0a2 2 0 0 1 2.828 0Z"
+                  class="icon_svg-stroke"
+                  stroke="#2e69ff"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  class="icon_svg-fill_as_stroke"
+                  fill="#2e69ff"
+                  d="m4.429 19.571 2.652-.884-1.768-1.768z"
+                ></path>
+                <path
+                  d="M14.5 19.5h5v-5m-10-10h-5v5"
+                  class="icon_svg-stroke"
+                  stroke="#2e69ff"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </g>
+            </svg>
+            <p>Answer</p>
+          </div>
+          <div hidden={openAnswer} id={"answerContainer"}>
+            <textarea
+              id={"answerTextArea"}
+              hidden={openAnswer}
+              onChange={e => setNewAnswer(e.target.value)}
+            ></textarea>
+            <button
+              id={"submitAnswer"}
+              hidden={openAnswer}
+              onClick={submitAnswer}
+            >
+              Answer
+            </button>
           </div>
         </>
       ) : (

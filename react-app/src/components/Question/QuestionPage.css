@@ -4,5 +4,57 @@
   align-items: center;
   height: 100%;
   width: 100%;
-  padding-bottom: 80px;
+  /* padding-bottom: 80px; */
+}
+
+#answerHeading {
+  margin-top: 80px;
+  width: 53%;
+}
+
+#answerButton {
+  display: flex;
+  width: 52%;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: -25px;
+}
+
+/* #answerButton:hover {
+  background-color: rgb(241, 237, 234);
+  border-radius: 20px;
+} */
+
+#answerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 53%;
+  margin-bottom: 30px;
+}
+
+#answerTextArea {
+  max-width: 53%;
+  min-width: 100%;
+  min-height: 250px;
+  height: fit-content;
+  font-family: "Noto Sans", sans-serif;
+  font-size: 14pt;
+  margin-bottom: 20px;
+  margin-top: 25px;
+  padding: 10px;
+}
+
+#submitAnswer {
+  border-radius: 20px;
+  background-color: #2e69ff;
+  font-size: 10pt;
+  font-weight: 600;
+  height: 2.2rem;
+  width: 7.2rem;
+  color: rgb(255, 255, 255);
+  border: none;
+  cursor: pointer;
 }
