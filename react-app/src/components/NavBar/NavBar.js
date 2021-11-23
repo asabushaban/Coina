@@ -33,7 +33,11 @@ const NavBar = () => {
           Coina
         </NavLink>
         <p>
-          <NavLink to="/login" exact={true} activeClassName="active">
+          <NavLink
+            to={`/myprofile/${sessionUser.id}`}
+            exact={true}
+            activeClassName="active"
+          >
             <svg
               width="24"
               height="24"

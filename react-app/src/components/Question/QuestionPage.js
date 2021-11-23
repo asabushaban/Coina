@@ -87,16 +87,16 @@ function QuestionPage() {
   const answerOpener = () => setOpenAnswer(!openAnswer);
 
   return (
-    <>
+    <div id={`mainAnswerContainer`}>
       {question ? (
-        <div>
-          <h1>{question.question}</h1>
+        <>
+          <h1 style={{ marginTop: "80px" }}>{question.question}</h1>
           <button onClick={answerOpener}>answer</button>
           <div hidden={openAnswer}>
             <textarea onChange={e => setNewAnswer(e.target.value)}></textarea>
             <button onClick={submitAnswer}>submit answer</button>
           </div>
-        </div>
+        </>
       ) : (
         <p>loading...</p>
       )}
@@ -107,12 +107,39 @@ function QuestionPage() {
             onClick={e => setMainAnswerId(answer.id)}
           >
             <p>{answer.body}</p>
-            <div>
+            <div className={"bottomQuestion"}>
+              <div className={"bottomQuestionLeft"} onClick={addUpVote}>
+                <svg
+                  id={"upArrowImg"}
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 4 3 15h6v5h6v-5h6z"
+                    class="icon_svg-stroke icon_svg-fill"
+                    stroke-width="1.5"
+                    stroke="#00"
+                    fill="#2e69ff"
+                    // fill="666"
+                    stroke-linejoin=""
+                  ></path>
+                </svg>
+                {/* <img
+                      id={"upArrowImg"}
+                      src={arrow}
+                      onClick={e => addUpVote(obj.id)}
+                    /> */}
+                <p id={"upVotesNum"}>{answer.upVotes}</p>
+              </div>
+            </div>
+            {/* <div>
               <button onClick={addUpVote} hidden={mainAnswerId != answer.id}>
                 upvote
               </button>
-            </div>
-            <p>{answer.upVotes}</p>
+            </div> */}
+            {/* <p>{answer.upVotes}</p> */}
             <button
               hidden={sessionUser.id != answer.user_id}
               onClick={answerDeleter}
@@ -134,7 +161,7 @@ function QuestionPage() {
       ) : (
         <p>no answers</p>
       )}
-    </>
+    </div>
   );
 }
 
