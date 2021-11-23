@@ -81,6 +81,8 @@
   margin-right: 0.6rem;
 }
 
+/* ask question modal */
+
 #askQuestionModal {
   display: flex;
   flex-direction: column;
@@ -142,5 +144,23 @@
   font-size: 11pt;
   font-weight: 400;
   color: rgb(119, 118, 118);
+  cursor: pointer;
+}
+
+/* delete question modal */
+
+#deleteQuestionModal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#deleteQuestionModalHeading {
+  text-align: center;
+}
+
+#deleteQuestionModalButton {
+  color: red;
+  text-align: center;
   cursor: pointer;
 }

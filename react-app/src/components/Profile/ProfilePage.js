@@ -1,25 +1,18 @@
+import "./MyProfilePage.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import {
-  addNewQuestion,
-  getQuestions,
-  deleteQuestion,
-  editQuestion,
-} from "../../store/question";
+import { getQuestions } from "../../store/question";
 import { authenticate } from "../../store/session";
+import QuestionContainer from "../QuestionContainer";
 
 function Profile() {
   const sessionUser = useSelector(state => state.session.user);
   const userQuestions = useSelector(state => state.questions);
-  const allAnswers = useSelector(state => state.answers);
 
   const dispatch = useDispatch();
   const { userId } = useParams();
 
-  const [newQuestion, setNewQuestion] = useState("");
-  const [mainQuestionId, setMainQuestionId] = useState("");
-  const [editedQuestion, setEditedQuestion] = useState("");
   const [user, setUser] = useState({});
   const [follows, setFollows] = useState("");
 
@@ -53,43 +46,6 @@ function Profile() {
     return null;
   }
 
-  // const submitQuestion = async e => {
-  //   e.preventDefault();
-  //   if (!sessionUser) return;
-  //   dispatch(addNewQuestion(newQuestion, userId)).then(() =>
-  //     dispatch(getQuestions(userId))
-  //   );
-  // };
-
-  const questionDeleter = async e => {
-    e.preventDefault();
-    if (!sessionUser) return;
-    dispatch(deleteQuestion(mainQuestionId)).then(() =>
-      dispatch(getQuestions(userId))
-    );
-  };
-
-  const questionEditor = async e => {
-    e.preventDefault();
-    if (!sessionUser) return;
-    await dispatch(editQuestion(mainQuestionId, editedQuestion)).then(() =>
-      dispatch(getQuestions(userId))
-    );
-  };
-
-  const addUpVote = async () => {
-    await fetch(`/api/questions/addupvote`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        question: mainQuestionId,
-        user_id: sessionUser.id,
-      }),
-    }).then(() => dispatch(getQuestions(userId)));
-  };
-
   const addFollow = async (id, profile) => {
     const response = await fetch(`/api/users/addfollow`, {
       method: "POST",
@@ -109,10 +65,12 @@ function Profile() {
     }
   };
 
+  console.log(userQuestions);
+
   return (
     <>
       <div id="mainHomeContainer">
-        <h1>{user.username}</h1>
+        <h1 id={"profileUserHeading"}>{user.username}</h1>
         {userId != sessionUser.id ? (
           <button onClick={e => addFollow(userId, "current")}>
             {sessionUser.follows[userId] ? `unfollow` : `follow`}
@@ -125,71 +83,15 @@ function Profile() {
           </div>
         ) : null}
         <h2>{user.username} Questions:</h2>
-        {userQuestions
-          ? Object.values(userQuestions).map(obj => (
-              <div
-                className="questionContainter"
-                onClick={e => setMainQuestionId(obj.id)}
-              >
-                <p style={{ fontSize: "8pt" }}>posted by: {obj.username}</p>
-                <Link
-                  className="questionLink"
-                  to={`/question/${obj.id}`}
-                  question={obj}
-                >
-                  {obj.question}
-                </Link>
-                {obj.topAnswer ? (
-                  <div>
-                    <p style={{ fontSize: "10pt" }}>
-                      {`${obj.topAnswer.body} - ${obj.topAnswer.username}`}
-                    </p>
-                    {sessionUser.follows[obj.topAnswer.user_id] ? (
-                      <button
-                        onClick={e =>
-                          addFollow(obj.topAnswer.user_id, "different")
-                        }
-                      >
-                        unfollow
-                      </button>
-                    ) : (
-                      <button
-                        onClick={e =>
-                          addFollow(obj.topAnswer.user_id, "different")
-                        }
-                      >
-                        follow
-                      </button>
-                    )}
-                  </div>
-                ) : (
-                  <p> "Answer this question.."</p>
-                )}
-                <p>{obj.upVotes}</p>
-                <button
-                  onClick={questionDeleter}
-                  hidden={mainQuestionId != obj.id}
-                >
-                  delete
-                </button>
-                <button
-                  onClick={questionEditor}
-                  hidden={mainQuestionId != obj.id}
-                >
-                  edit
-                </button>
-                <input
-                  onChange={e => setEditedQuestion(e.target.value)}
-                  hidden={mainQuestionId != obj.id}
-                ></input>
-                <div>
-                  <button onClick={addUpVote} hidden={mainQuestionId != obj.id}>
-                    upvote
-                  </button>
-                </div>
-              </div>
-            ))
-          : null}
+        {userQuestions && Object.keys(userQuestions).length != 0 ? (
+          <QuestionContainer
+            questions={userQuestions}
+            location={"profile"}
+            user={userId}
+          />
+        ) : (
+          <h1>{user.username} has not posted any questions!</h1>
+        )}
       </div>
     </>
   );
