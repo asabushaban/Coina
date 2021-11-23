@@ -147,3 +147,81 @@ body {
   -o-transform: scaleX(1.2);
   transform: scaleY(1.2);
 }
+
+/*
+
+login form styling
+
+*/
+
+.mainLogin {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  background-image: url("//qsf.fs.quoracdn.net/-4-ans_frontend_assets.images.home_page_bg_desktop.png-26-4770753d59b970e1.png");
+}
+
+#loginForm {
+  display: flex;
+  flex-direction: column;
+  height: 50%;
+  width: 50%;
+  background-color: snow;
+  border-radius: 8px;
+  box-shadow: 10px 10px 10px 10px rgba(107, 107, 107, 0.2);
+}
+
+#topLoginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#bottomLoginForm {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  margin-left: 20%;
+}
+
+.loginInput {
+  width: 80%;
+  height: 115%;
+}
+
+#loginButtons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+#signUpModalPrompt {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+#signUpModalPrompt:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.signupInput {
+  width: 80%;
+  height: 30px;
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
+#signupContainter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}

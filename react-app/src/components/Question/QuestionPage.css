@@ -58,3 +58,8 @@
   border: none;
   cursor: pointer;
 }
+
+#answerContainerTop {
+  display: flex;
+  justify-content: space-between;
+}
