@@ -88,13 +88,13 @@ export const getQuestions = (userId, sessionUserId) => async dispatch => {
 
 //get questions for everyone a user follows
 
-export const getFollowedQuestions = follows => async dispatch => {
+export const getFollowedQuestions = sessionUser => async dispatch => {
   const response = await fetch(`/api/questions/follows`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ follows }),
+    body: JSON.stringify({ sessionUser }),
   });
 
   if (response.ok) {

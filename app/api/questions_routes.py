@@ -117,13 +117,13 @@ def user_questions(id):
 @login_required
 def user_follow_questions():
     questions = {}
-    follows = itemgetter("follows")(request.json)
-    sessionUser = follows["id"]
-    follows = follows["follows"]
+    session_user = itemgetter("sessionUser")(request.json)
+    session_user_id = session_user["id"]
+    follows = session_user["follows"]
     for id in follows.keys():
-        for qId, q in question_getter(id, sessionUser).items():
+        for qId, q in question_getter(id, session_user_id).items():
             questions[qId] = q
-    for session_user_q_id, session_user_q in question_getter(sessionUser, sessionUser).items():
+    for session_user_q_id, session_user_q in question_getter(session_user_id, session_user_id).items():
         questions[session_user_q_id] = session_user_q
     return questions
 
