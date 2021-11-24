@@ -118,11 +118,13 @@ def user_questions(id):
 def user_follow_questions():
     questions = {}
     follows = itemgetter("follows")(request.json)
-    user_id = follows["id"]
+    sessionUser = follows["id"]
     follows = follows["follows"]
     for id in follows.keys():
-        for qId, q in question_getter(id, user_id).items():
+        for qId, q in question_getter(id, sessionUser).items():
             questions[qId] = q
+    for session_user_q_id, session_user_q in question_getter(sessionUser, sessionUser).items():
+        questions[session_user_q_id] = session_user_q
     return questions
 
 # get one question (read)

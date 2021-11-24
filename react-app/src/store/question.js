@@ -47,13 +47,13 @@ export const deleteQuestion = id => async dispatch => {
 };
 
 //create a question
-export const addNewQuestion = (question, userId) => async dispatch => {
+export const addNewQuestion = (question, user_id) => async dispatch => {
   const res = await fetch(`/api/questions/add`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ question: question, user_id: userId }),
+    body: JSON.stringify({ question, user_id }),
   });
 
   if (res.ok) {
