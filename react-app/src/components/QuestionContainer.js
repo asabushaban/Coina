@@ -24,7 +24,7 @@ function QuestionContainer({ questions, location, user }) {
 
   useEffect(async () => {
     if (location === "home") {
-      dispatch(getFollowedQuestions(sessionUser.follows));
+      dispatch(getFollowedQuestions(sessionUser));
     } else {
       dispatch(getQuestions(user));
     }
@@ -34,7 +34,7 @@ function QuestionContainer({ questions, location, user }) {
     if (!sessionUser) return;
     if (location === "home") {
       dispatch(deleteQuestion(mainQuestionId)).then(() =>
-        dispatch(getFollowedQuestions(sessionUser.follows))
+        dispatch(getFollowedQuestions(sessionUser))
       );
     } else {
       dispatch(deleteQuestion(mainQuestionId)).then(() =>
@@ -47,7 +47,7 @@ function QuestionContainer({ questions, location, user }) {
     if (!sessionUser) return;
     if (location === "home") {
       await dispatch(editQuestion(mainQuestionId, editedQuestion)).then(() =>
-        dispatch(getFollowedQuestions(sessionUser.follows))
+        dispatch(getFollowedQuestions(sessionUser))
       );
     } else {
       await dispatch(editQuestion(mainQuestionId, editedQuestion)).then(() =>
@@ -67,7 +67,7 @@ function QuestionContainer({ questions, location, user }) {
           question: id,
           user_id: sessionUser.id,
         }),
-      }).then(() => dispatch(getFollowedQuestions(sessionUser.follows)));
+      }).then(() => dispatch(getFollowedQuestions(sessionUser)));
     } else {
       await fetch(`/api/questions/addupvote`, {
         method: "POST",
@@ -235,28 +235,42 @@ function QuestionContainer({ questions, location, user }) {
                   className={"bottomQuestionLeft"}
                   onClick={e => addUpVote(obj.id, location)}
                 >
-                  <svg
-                    id={"upArrowImg"}
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 4 3 15h6v5h6v-5h6z"
-                      class="icon_svg-stroke icon_svg-fill"
-                      stroke-width="1.5"
-                      stroke="#00"
-                      fill="#2e69ff"
-                      // fill="666"
-                      stroke-linejoin=""
-                    ></path>
-                  </svg>
-                  {/* <img
+                  {obj.upVoted ? (
+                    <svg
                       id={"upArrowImg"}
-                      src={arrow}
-                      onClick={e => addUpVote(obj.id)}
-                    /> */}
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 4 3 15h6v5h6v-5h6z"
+                        class="icon_svg-stroke icon_svg-fill"
+                        stroke-width="1.5"
+                        stroke="#00"
+                        fill="#2e69ff"
+                        // fill="666"
+                        stroke-linejoin=""
+                      ></path>
+                    </svg>
+                  ) : (
+                    <svg
+                      id={"upArrowImg"}
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 4 3 15h6v5h6v-5h6z"
+                        class="icon_svg-stroke icon_svg-fill"
+                        stroke-width="1.5"
+                        stroke="#2e69ff"
+                        fill="none"
+                        stroke-linejoin="round"
+                      ></path>
+                    </svg>
+                  )}
                   <p id={"upVotesNum"}>{obj.upVotes}</p>
                 </div>
                 <p style={{ fontSize: "8pt" }}>posted by: {obj.username}</p>

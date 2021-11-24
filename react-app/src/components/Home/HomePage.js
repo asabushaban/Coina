@@ -16,13 +16,13 @@ function HomePage() {
   const [modal, setModal] = useState(false);
 
   useEffect(async () => {
-    dispatch(getFollowedQuestions(sessionUser.follows));
+    dispatch(getFollowedQuestions(sessionUser));
   }, [dispatch]);
 
   const submitQuestion = async e => {
     if (!sessionUser) return;
     dispatch(addNewQuestion(newQuestion, sessionUser.id)).then(() =>
-      dispatch(getFollowedQuestions(sessionUser.follows))
+      dispatch(getFollowedQuestions(sessionUser))
     );
   };
   return (

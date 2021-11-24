@@ -47,18 +47,27 @@ def add_question():
         return None
 
 
-def question_getter(id):
+def question_getter(id, user_id):
     user = User.query.get(id)
     questions = {}
-    # print("one users qs========================", Question.query.filter(Question.user_id==user.id).all())
-    # print("all qs==============================", Question.query.all())
     for question in Question.query.filter(Question.user_id==user.id):
         questions[question.id] = question.to_dict()
         questions[question.id]["upVotes"] = len(UpVoteQuestion.query.filter(UpVoteQuestion.question_id==question.id).all())
         questions[question.id]["username"] = user.username
+        if user_id == "none":
+            exisiting_upvote = UpVoteQuestion.query.filter(UpVoteQuestion.user_id==id).filter(UpVoteQuestion.question_id==question.id)
+            if exisiting_upvote.one_or_none():
+                questions[question.id]["upVoted"] = True
+            else:
+                questions[question.id]["upVoted"] = False
+        else:
+            exisiting_upvote = UpVoteQuestion.query.filter(UpVoteQuestion.user_id==user_id).filter(UpVoteQuestion.question_id==question.id)
+            if exisiting_upvote.one_or_none():
+                questions[question.id]["upVoted"] = True
+            else:
+                questions[question.id]["upVoted"] = False
         if Answer.query.filter(Answer.question_id == question.id).first():
             mostVotes = []
-            # topAnswer = Answer.query.filter(Answer.question_id == question.id).first().to_dict()
             for answer in Answer.query.filter(Answer.question_id == question.id).all():
                 answer = answer.to_dict()
                 totalVotes = len(UpVoteAnswer.query.filter(UpVoteAnswer.answer_id==answer["id"]).all())
@@ -80,7 +89,7 @@ def question_getter(id):
 @questions_routes.route('/myquestions/<int:id>')
 @login_required
 def user_questions(id):
-    return question_getter(id)
+    return question_getter(id, "none")
 
 # get users follow questions (read)
 @questions_routes.route('/follows', methods=["PUT"])
@@ -88,8 +97,11 @@ def user_questions(id):
 def user_follow_questions():
     questions = {}
     follows = itemgetter("follows")(request.json)
+    print("===============================",follows["id"])
+    user_id = follows["id"]
+    follows = follows["follows"]
     for id in follows.keys():
-        for qId, q in question_getter(id).items():
+        for qId, q in question_getter(id, user_id).items():
             questions[qId] = q
     return questions
 
