@@ -30,8 +30,6 @@ def add_upvote():
 @questions_routes.route('/add', methods=["POST"])
 @login_required
 def add_question():
-    # question, user_id = itemgetter("question", "user_id")(request.json)
-    # user = User.query.get(user_id)
     form = QuestionForm()
     if(form.validate_on_submit):
         newQuestion = Question(
@@ -47,32 +45,47 @@ def add_question():
         return None
 
 
-def question_getter(id, user_id):
+#id is the id of the user whose questions you need
+#session_user is the session user
+def question_getter(id, session_user):
+
+    # sets the user for the specific user you are getting questions for
+    # and initializes empty obj to store all questions
     user = User.query.get(id)
     questions = {}
+
+    # queries for all questions made by that user and loops through each question
     for question in Question.query.filter(Question.user_id==user.id):
+
+        # turns query question into a dictionary, adds it to main question dict (on 54)
+        # with the key of the question id
+        # adds total upvote count
+        # adds the username of the user who posted it
         questions[question.id] = question.to_dict()
         questions[question.id]["upVotes"] = len(UpVoteQuestion.query.filter(UpVoteQuestion.question_id==question.id).all())
         questions[question.id]["username"] = user.username
-        if user_id == "none":
-            exisiting_upvote = UpVoteQuestion.query.filter(UpVoteQuestion.user_id==id).filter(UpVoteQuestion.question_id==question.id)
-            if exisiting_upvote.one_or_none():
-                questions[question.id]["upVoted"] = True
-            else:
-                questions[question.id]["upVoted"] = False
-        else:
-            exisiting_upvote = UpVoteQuestion.query.filter(UpVoteQuestion.user_id==user_id).filter(UpVoteQuestion.question_id==question.id)
-            if exisiting_upvote.one_or_none():
-                questions[question.id]["upVoted"] = True
-            else:
-                questions[question.id]["upVoted"] = False
+
+        #queries to see if the session user has upvotes the question
+        #if true "upvoted" key added to object with value of true
+        exisiting_upvote = UpVoteQuestion.query.filter(UpVoteQuestion.user_id==session_user).filter(UpVoteQuestion.question_id==question.id)
+        if exisiting_upvote.one_or_none():
+            questions[question.id]["upVoted"] = True
+
+        #checks if the question has at least one answer
         if Answer.query.filter(Answer.question_id == question.id).first():
             mostVotes = []
+
+            #loops through all the answers
+            # adds an upvotes key to each answer with the total upvote count
+            # adds the answer along with the total vote count to a mostVotes list
             for answer in Answer.query.filter(Answer.question_id == question.id).all():
                 answer = answer.to_dict()
                 totalVotes = len(UpVoteAnswer.query.filter(UpVoteAnswer.answer_id==answer["id"]).all())
                 answer["upVotes"] = totalVotes
                 mostVotes.append(answer)
+
+            # loops through the most votes list to find
+            # the answer with the highest vote count
             highestVotes = mostVotes[0]["upVotes"]
             highest = mostVotes[0]
             for ans in mostVotes:
@@ -80,16 +93,24 @@ def question_getter(id, user_id):
                     highestVotes = ans["upVotes"]
                     highest = ans
             topAnswer = highest
+
+            #gets the username for whoever user's answer has the most upvotes
+            #adds the username to the top answer dictionary
             topAnswer["username"] = User.query.get(topAnswer["user_id"]).to_dict()['username']
+
+            #adds the top answer to the question dictionary
             questions[question.id]["topAnswer"] = topAnswer
+
+    # returns a dictionary with all a users questions with the question id as keys
     return questions
 
 
 # get a users questions (read)
-@questions_routes.route('/myquestions/<int:id>')
+@questions_routes.route('/myquestions/<int:id>', methods=["PUT"])
 @login_required
 def user_questions(id):
-    return question_getter(id, "none")
+        session_user = itemgetter("sessionUserId")(request.json)
+        return question_getter(id, session_user)
 
 # get users follow questions (read)
 @questions_routes.route('/follows', methods=["PUT"])
@@ -97,7 +118,6 @@ def user_questions(id):
 def user_follow_questions():
     questions = {}
     follows = itemgetter("follows")(request.json)
-    print("===============================",follows["id"])
     user_id = follows["id"]
     follows = follows["follows"]
     for id in follows.keys():

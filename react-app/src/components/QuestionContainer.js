@@ -26,7 +26,7 @@ function QuestionContainer({ questions, location, user }) {
     if (location === "home") {
       dispatch(getFollowedQuestions(sessionUser));
     } else {
-      dispatch(getQuestions(user));
+      dispatch(getQuestions(user, sessionUser.id));
     }
   }, [dispatch]);
 
@@ -38,7 +38,7 @@ function QuestionContainer({ questions, location, user }) {
       );
     } else {
       dispatch(deleteQuestion(mainQuestionId)).then(() =>
-        dispatch(getQuestions(user))
+        dispatch(getQuestions(user, sessionUser.id))
       );
     }
   };
@@ -51,7 +51,7 @@ function QuestionContainer({ questions, location, user }) {
       );
     } else {
       await dispatch(editQuestion(mainQuestionId, editedQuestion)).then(() =>
-        dispatch(getQuestions(user))
+        dispatch(getQuestions(user, sessionUser.id))
       );
     }
   };
@@ -78,7 +78,7 @@ function QuestionContainer({ questions, location, user }) {
           question: id,
           user_id: sessionUser.id,
         }),
-      }).then(() => dispatch(getQuestions(user)));
+      }).then(() => dispatch(getQuestions(user, sessionUser.id)));
     }
   };
 

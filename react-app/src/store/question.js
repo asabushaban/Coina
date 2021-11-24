@@ -63,8 +63,14 @@ export const addNewQuestion = (question, userId) => async dispatch => {
 };
 
 //get questions for one user
-export const getQuestions = userId => async dispatch => {
-  const response = await fetch(`/api/questions/myquestions/${userId}`);
+export const getQuestions = (userId, sessionUserId) => async dispatch => {
+  const response = await fetch(`/api/questions/myquestions/${userId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ sessionUserId }),
+  });
 
   if (response.ok) {
     const questions = await response.json();
