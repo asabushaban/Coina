@@ -178,7 +178,10 @@ function QuestionContainer({ questions, location, user }) {
                 <div className={"topQuestion"}>
                   {sessionUser.follows[obj.topAnswer.user_id] ? (
                     <div id={"topQuestionLeft"}>
-                      <Link className={"questionAnswerer"}>
+                      <Link
+                        to={`/profile/${obj.topAnswer.user_id}`}
+                        className={"questionAnswerer"}
+                      >
                         {`${obj.topAnswer.username}`}
                       </Link>
                       <p style={{ padding: "0px", margin: "0px" }}> · </p>
@@ -192,7 +195,10 @@ function QuestionContainer({ questions, location, user }) {
                     </div>
                   ) : (
                     <div id={"topQuestionLeft"}>
-                      <Link className={"questionAnswerer"}>
+                      <Link
+                        className={"questionAnswerer"}
+                        to={`/profile/${obj.topAnswer.user_id}`}
+                      >
                         {`${obj.topAnswer.username}`}
                       </Link>
                       <p
@@ -285,7 +291,12 @@ function QuestionContainer({ questions, location, user }) {
                   )}
                   <p id={"upVotesNum"}>{obj.upVotes}</p>
                 </div>
-                <p style={{ fontSize: "8pt" }}>posted by: {obj.username}</p>
+                <Link
+                  to={`/profile/${obj.user_id}`}
+                  className={"questionToProfile"}
+                >
+                  posted by: {obj.username}
+                </Link>
               </div>
             </div>
           ))
@@ -302,7 +313,7 @@ function QuestionContainer({ questions, location, user }) {
         </h2>
         <h4
           onClick={e => {
-            questionDeleter("myprofile");
+            questionDeleter(location);
             setModalDelete(false);
           }}
           id={"deleteQuestionModalButton"}
