@@ -7,6 +7,7 @@ import {
   deleteQuestion,
   editQuestion,
   getFollowedQuestions,
+  getAllQuestions,
 } from "../store/question";
 import { authenticate } from "../store/session";
 import Modal from "./Modal/Modal";
@@ -22,19 +23,15 @@ function QuestionContainer({ questions, location, user }) {
   const [editedQuestion, setEditedQuestion] = useState("");
   // const [follows, setFollows] = useState("");
 
-  useEffect(async () => {
-    if (location === "home") {
-      dispatch(getFollowedQuestions(sessionUser));
-    } else {
-      dispatch(getQuestions(user, sessionUser.id));
-    }
-  }, [dispatch]);
-
   const questionDeleter = async location => {
     if (!sessionUser) return;
     if (location === "home") {
       dispatch(deleteQuestion(mainQuestionId)).then(() =>
         dispatch(getFollowedQuestions(sessionUser))
+      );
+    } else if (location === "all") {
+      dispatch(deleteQuestion(mainQuestionId)).then(() =>
+        dispatch(getAllQuestions(sessionUser))
       );
     } else {
       dispatch(deleteQuestion(mainQuestionId)).then(() =>
@@ -48,6 +45,10 @@ function QuestionContainer({ questions, location, user }) {
     if (location === "home") {
       await dispatch(editQuestion(mainQuestionId, editedQuestion)).then(() =>
         dispatch(getFollowedQuestions(sessionUser))
+      );
+    } else if (location === "all") {
+      await dispatch(editQuestion(mainQuestionId, editedQuestion)).then(() =>
+        dispatch(getAllQuestions(sessionUser))
       );
     } else {
       await dispatch(editQuestion(mainQuestionId, editedQuestion)).then(() =>
@@ -68,6 +69,17 @@ function QuestionContainer({ questions, location, user }) {
           user_id: sessionUser.id,
         }),
       }).then(() => dispatch(getFollowedQuestions(sessionUser)));
+    } else if (location === "all") {
+      await fetch(`/api/questions/addupvote`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question: id,
+          user_id: sessionUser.id,
+        }),
+      }).then(() => dispatch(getAllQuestions(sessionUser)));
     } else {
       await fetch(`/api/questions/addupvote`, {
         method: "POST",

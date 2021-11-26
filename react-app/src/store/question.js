@@ -5,6 +5,9 @@ const ADD_QUESTION = "questions/ADD";
 const LOAD_QUESTION = "questions/LOAD";
 
 //get questions for one user
+const LOAD_ALL_QUESTION = "questions/LOAD_ALL_QUESTIONS";
+
+//get questions for one user
 const LOAD_FOLLOWS_QUESTION = "questions/LOAD_FOLLOWS";
 
 //remove a question
@@ -27,6 +30,11 @@ const loadQuestion = questions => ({
 
 const loadFollowsQuestion = questions => ({
   type: LOAD_FOLLOWS_QUESTION,
+  questions,
+});
+
+const loadAllQuestion = questions => ({
+  type: LOAD_ALL_QUESTION,
   questions,
 });
 
@@ -75,6 +83,30 @@ export const getQuestions = (userId, sessionUserId) => async dispatch => {
   if (response.ok) {
     const questions = await response.json();
     dispatch(loadQuestion(questions));
+    return null;
+  } else if (response.status < 500) {
+    const data = await response.json();
+    if (data.errors) {
+      return data.errors;
+    }
+  } else {
+    return ["An error occurred. Please try again."];
+  }
+};
+
+//get all questions for one user
+export const getAllQuestions = sessionUserId => async dispatch => {
+  const response = await fetch(`/api/questions/all`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ sessionUserId }),
+  });
+
+  if (response.ok) {
+    const questions = await response.json();
+    dispatch(loadAllQuestion(questions));
     return null;
   } else if (response.status < 500) {
     const data = await response.json();
@@ -152,6 +184,12 @@ export default function reducer(state = initialState, action) {
       };
     }
     case LOAD_FOLLOWS_QUESTION: {
+      return {
+        // ...state,
+        ...action.questions,
+      };
+    }
+    case LOAD_ALL_QUESTION: {
       return {
         // ...state,
         ...action.questions,
