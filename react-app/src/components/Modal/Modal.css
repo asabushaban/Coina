@@ -164,3 +164,18 @@
   text-align: center;
   cursor: pointer;
 }
+
+/* ask question from Nav button */
+
+#askQuestionButtonNav {
+  border-radius: 20px;
+  background-color: #b92b27;
+  font-size: 10pt;
+  font-weight: 600;
+  height: 2.2rem;
+  width: 7.2rem;
+  color: rgb(255, 255, 255);
+  margin-left: 10px;
+  border: none;
+  cursor: pointer;
+}
