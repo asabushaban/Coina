@@ -17,7 +17,7 @@ function Profile() {
   const [follows, setFollows] = useState("");
 
   useEffect(async () => {
-    dispatch(getQuestions(userId));
+    dispatch(getQuestions(userId, sessionUser.id));
   }, [dispatch]);
 
   useEffect(() => {
@@ -64,8 +64,6 @@ function Profile() {
       return;
     }
   };
-
-  console.log(userQuestions);
 
   return (
     <>

@@ -30,7 +30,7 @@ function MyProfile() {
   }, []);
 
   useEffect(async () => {
-    dispatch(getQuestions(sessionUser.id));
+    dispatch(getQuestions(sessionUser.id, sessionUser.id));
   }, [dispatch]);
 
   return (

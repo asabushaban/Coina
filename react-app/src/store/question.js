@@ -47,13 +47,13 @@ export const deleteQuestion = id => async dispatch => {
 };
 
 //create a question
-export const addNewQuestion = (question, userId) => async dispatch => {
+export const addNewQuestion = (question, user_id) => async dispatch => {
   const res = await fetch(`/api/questions/add`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ question: question, user_id: userId }),
+    body: JSON.stringify({ question, user_id }),
   });
 
   if (res.ok) {
@@ -63,8 +63,14 @@ export const addNewQuestion = (question, userId) => async dispatch => {
 };
 
 //get questions for one user
-export const getQuestions = userId => async dispatch => {
-  const response = await fetch(`/api/questions/myquestions/${userId}`);
+export const getQuestions = (userId, sessionUserId) => async dispatch => {
+  const response = await fetch(`/api/questions/myquestions/${userId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ sessionUserId }),
+  });
 
   if (response.ok) {
     const questions = await response.json();
@@ -82,13 +88,13 @@ export const getQuestions = userId => async dispatch => {
 
 //get questions for everyone a user follows
 
-export const getFollowedQuestions = follows => async dispatch => {
+export const getFollowedQuestions = sessionUser => async dispatch => {
   const response = await fetch(`/api/questions/follows`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ follows }),
+    body: JSON.stringify({ sessionUser }),
   });
 
   if (response.ok) {
