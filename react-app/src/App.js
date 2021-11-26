@@ -41,7 +41,7 @@ function App() {
         </Route>
         <ProtectedRoute path="/users" exact={true}>
           <NavBar />
-          <AllQuestions />
+          <HomePage />
         </ProtectedRoute>
         <ProtectedRoute path="/users/:userId" exact={true}>
           <NavBar />
@@ -61,7 +61,7 @@ function App() {
         </ProtectedRoute>
         <ProtectedRoute path="/" exact={true}>
           <NavBar />
-          <HomePage />
+          <AllQuestions />
         </ProtectedRoute>
       </Switch>
     </BrowserRouter>

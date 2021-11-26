@@ -28,12 +28,12 @@ function HomePage() {
   return (
     <>
       <div id="mainHomeContainer">
-        {sessionUser ? (
+        {/* {sessionUser ? (
           <div id={"askQuestionBox"} onClick={e => setModal(true)}>
             <p id={"askQuestionBoxName"}>{sessionUser.username}</p>
             <p id={"askQuestionBoxPrompt"}>What is your question?</p>
           </div>
-        ) : null}
+        ) : null} */}
         <Modal
           title={`Add Question`}
           show={modal}
@@ -62,6 +62,7 @@ function HomePage() {
             </div>
           </div>
         </Modal>
+        <h1 style={{ marginTop: "100px" }}> Following:</h1>
         {userQuestions && Object.keys(userQuestions).length != 0 ? (
           <QuestionContainer
             questions={userQuestions}

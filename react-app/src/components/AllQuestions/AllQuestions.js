@@ -29,7 +29,6 @@ function AllQuestions() {
   return (
     <>
       <div id="mainHomeContainer">
-        <h1 style={{ marginTop: "100px" }}>All Coina questions:</h1>
         {sessionUser ? (
           <div id={"askQuestionBox"} onClick={e => setModal(true)}>
             <p id={"askQuestionBoxName"}>{sessionUser.username}</p>
