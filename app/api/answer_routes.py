@@ -48,14 +48,18 @@ def add_question():
 
 
 # get a users answers (read)
-@answers_routes.route('/<int:id>')
+@answers_routes.route('/<int:id>', methods=["PUT"])
 @login_required
 def question_answers(id):
+    session_user = itemgetter("sessionUserId")(request.json)
     # question = Question.query.get(id)
     answers = {answer.id: answer.to_dict() for answer in Answer.query.filter(Answer.question_id==id)}
     for ans in answers.values():
         answers[ans["id"]]["username"] = User.query.get(ans['user_id']).to_dict()['username']
         answers[ans["id"]]["upVotes"] = len(UpVoteAnswer.query.filter(UpVoteAnswer.answer_id==ans['id']).all())
+        exisiting_upvote = UpVoteAnswer.query.filter(UpVoteAnswer.user_id==session_user).filter(UpVoteAnswer.answer_id==ans["id"])
+        if exisiting_upvote.one_or_none():
+            answers[ans["id"]]["upVoted"] = True
     return answers
     # return {question.id:question.to_dict() for question in Question.query.filter(Question.user_id==user.id)}
 

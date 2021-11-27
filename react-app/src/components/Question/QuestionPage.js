@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getQuestions } from "../../store/question";
 import Modal from "../Modal/Modal";
+import { authenticate } from "../../store/session";
 import {
   deleteAnswer,
   addNewAnswer,
@@ -31,7 +32,7 @@ function QuestionPage() {
 
   useEffect(async () => {
     await dispatch(getQuestions(sessionUser.id));
-    await dispatch(getAnswers(+questionId));
+    await dispatch(getAnswers(+questionId, sessionUser.id));
   }, [dispatch]);
 
   useEffect(() => {
@@ -61,14 +62,14 @@ function QuestionPage() {
   const answerDeleter = async () => {
     if (!sessionUser) return;
     dispatch(deleteAnswer(mainAnswerId)).then(() =>
-      dispatch(getAnswers(+questionId))
+      dispatch(getAnswers(+questionId, sessionUser.id))
     );
   };
 
   const answerEditor = async () => {
     if (!sessionUser) return;
     await dispatch(editAnswer(mainAnswerId, editedAnswer)).then(() =>
-      dispatch(getAnswers(+questionId))
+      dispatch(getAnswers(+questionId, sessionUser.id))
     );
   };
 
@@ -82,7 +83,21 @@ function QuestionPage() {
         answer: id,
         user_id: sessionUser.id,
       }),
-    }).then(() => dispatch(getAnswers(+questionId)));
+    }).then(() => dispatch(getAnswers(+questionId, sessionUser.id)));
+  };
+
+  const addFollow = async id => {
+    const response = await fetch(`/api/users/addfollow`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        followed: id,
+        follower: sessionUser.id,
+      }),
+    });
+    await dispatch(authenticate());
   };
 
   const deleteAndEditElements = answer => {
@@ -218,28 +233,88 @@ function QuestionPage() {
                 <>{deleteAndEditElements(answer)}</>
               ) : null}
             </div>
+            {sessionUser.follows[answer.user_id] ? (
+              <div id={"topQuestionLeft"}>
+                <Link
+                  to={`/profile/${answer.user_id}`}
+                  className={"questionAnswerer"}
+                >
+                  {`${answer.username}`}
+                </Link>
+                <p style={{ padding: "0px", margin: "0px" }}> · </p>
+                <p
+                  className={"questionFollow"}
+                  onClick={e => addFollow(answer.user_id)}
+                  style={{ color: "rgb(133, 131, 131)" }}
+                >
+                  Following
+                </p>
+              </div>
+            ) : (
+              <div id={"topQuestionLeft"}>
+                <Link
+                  className={"questionAnswerer"}
+                  to={`/profile/${answer.user_id}`}
+                >
+                  {`${answer.username}`}
+                </Link>
+                <p
+                  style={{
+                    padding: "0px",
+                    margin: "0px",
+                  }}
+                >
+                  ·
+                </p>
+                <p
+                  className={"questionFollow"}
+                  onClick={e => addFollow(answer.user_id)}
+                >
+                  Follow
+                </p>
+              </div>
+            )}
             <div className={"bottomQuestion"}>
               <div
                 className={"bottomQuestionLeft"}
                 onClick={e => addUpVote(answer.id)}
               >
-                <svg
-                  id={"upArrowImg"}
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 4 3 15h6v5h6v-5h6z"
-                    class="icon_svg-stroke icon_svg-fill"
-                    stroke-width="1.5"
-                    stroke="#00"
-                    fill="#2e69ff"
-                    // fill="666"
-                    stroke-linejoin=""
-                  ></path>
-                </svg>
+                {answer.upVoted ? (
+                  <svg
+                    id={"upArrowImg"}
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 4 3 15h6v5h6v-5h6z"
+                      class="icon_svg-stroke icon_svg-fill"
+                      stroke-width="1.5"
+                      stroke="#00"
+                      fill="#2e69ff"
+                      // fill="666"
+                      stroke-linejoin=""
+                    ></path>
+                  </svg>
+                ) : (
+                  <svg
+                    id={"upArrowImg"}
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 4 3 15h6v5h6v-5h6z"
+                      class="icon_svg-stroke icon_svg-fill"
+                      stroke-width="1.5"
+                      stroke="#2e69ff"
+                      fill="none"
+                      stroke-linejoin="round"
+                    ></path>
+                  </svg>
+                )}
                 <p id={"upVotesNum"}>{answer.upVotes}</p>
               </div>
             </div>

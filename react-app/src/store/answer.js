@@ -59,8 +59,14 @@ export const addNewAnswer = (body, userId, questionId) => async dispatch => {
 };
 
 //get ANSWERs for one user
-export const getAnswers = questionId => async dispatch => {
-  const response = await fetch(`/api/answers/${questionId}`);
+export const getAnswers = (questionId, sessionUserId) => async dispatch => {
+  const response = await fetch(`/api/answers/${questionId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ sessionUserId: sessionUserId }),
+  });
 
   if (response.ok) {
     const answers = await response.json();
