@@ -89,7 +89,7 @@ const NavBar = () => {
           </p>
         ) : null}
         <NavLink
-          to="/users"
+          to="/following"
           exact={true}
           activeClassName="active"
           onClick={e => setMainIcon("users")}

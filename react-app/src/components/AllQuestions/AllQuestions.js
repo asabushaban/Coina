@@ -1,12 +1,12 @@
-import "./HomePage.css";
+import "./AllQuestions.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { addNewQuestion, getFollowedQuestions } from "../../store/question";
+import { addNewQuestion, getAllQuestions } from "../../store/question";
 // import arrow from "../trans-arrow.jpeg";
 import Modal from "../Modal/Modal";
 import QuestionContainer from "../QuestionContainer";
 
-function HomePage() {
+function AllQuestions() {
   const sessionUser = useSelector(state => state.session.user);
   const userQuestions = useSelector(state => state.questions);
 
@@ -16,24 +16,25 @@ function HomePage() {
   const [modal, setModal] = useState(false);
 
   useEffect(async () => {
-    dispatch(getFollowedQuestions(sessionUser));
+    dispatch(getAllQuestions(sessionUser));
   }, [dispatch]);
 
   const submitQuestion = async e => {
     if (!sessionUser) return;
     dispatch(addNewQuestion(newQuestion, sessionUser.id)).then(() =>
-      dispatch(getFollowedQuestions(sessionUser))
+      dispatch(getAllQuestions(sessionUser))
     );
   };
+
   return (
     <>
       <div id="mainHomeContainer">
-        {/* {sessionUser ? (
+        {sessionUser ? (
           <div id={"askQuestionBox"} onClick={e => setModal(true)}>
             <p id={"askQuestionBoxName"}>{sessionUser.username}</p>
             <p id={"askQuestionBoxPrompt"}>What is your question?</p>
           </div>
-        ) : null} */}
+        ) : null}
         <Modal
           title={`Add Question`}
           show={modal}
@@ -62,12 +63,11 @@ function HomePage() {
             </div>
           </div>
         </Modal>
-        <h1 style={{ marginTop: "100px" }}> Following:</h1>
         {userQuestions && Object.keys(userQuestions).length != 0 ? (
           <QuestionContainer
             questions={userQuestions}
-            location={"home"}
-            user={sessionUser.follows}
+            location={"all"}
+            user={sessionUser.id}
           />
         ) : (
           <h1>No one you follow has posted anything!</h1>
@@ -77,4 +77,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default AllQuestions;

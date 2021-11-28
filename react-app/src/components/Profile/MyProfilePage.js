@@ -36,14 +36,16 @@ function MyProfile() {
   return (
     <>
       <div id="mainHomeContainer">
-        <h1 id={"profileUserHeading"}>{sessionUser.username}</h1>
-        {follows ? (
-          <div>
-            <p>following:{follows.totalFollowing}</p>
-            <p>followers:{follows.totalFollowers}</p>
-          </div>
-        ) : null}
-        <h2>My Questions:</h2>
+        <div>
+          <h1 id={"profileUserHeading"}>{sessionUser.username}</h1>
+          {follows ? (
+            <div id={"followsHolder"}>
+              <p id={"following"}>following:{follows.totalFollowing}</p>
+              <p id={"followers"}>followers:{follows.totalFollowers}</p>
+            </div>
+          ) : null}
+        </div>
+        {/* <h2>My Questions:</h2> */}
         {userQuestions && Object.keys(userQuestions).length != 0 ? (
           <QuestionContainer
             questions={userQuestions}

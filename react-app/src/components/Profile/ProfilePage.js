@@ -68,18 +68,24 @@ function Profile() {
   return (
     <>
       <div id="mainHomeContainer">
-        <h1 id={"profileUserHeading"}>{user.username}</h1>
-        {userId != sessionUser.id ? (
-          <button onClick={e => addFollow(userId, "current")}>
-            {sessionUser.follows[userId] ? `unfollow` : `follow`}
-          </button>
-        ) : null}
-        {follows ? (
-          <div>
-            <p>following:{follows.totalFollowing}</p>
-            <p>followers:{follows.totalFollowers}</p>
-          </div>
-        ) : null}
+        <div>
+          <h1 id={"profileUserHeading"}>{user.username}</h1>
+          {follows ? (
+            <div id={"followsHolder"}>
+              <p id={"following"}>{follows.totalFollowing} following</p>
+              <p>·</p>
+              <p id={"followers"}>{follows.totalFollowers} followers</p>
+            </div>
+          ) : null}
+          {userId != sessionUser.id ? (
+            <button
+              id={"followButton"}
+              onClick={e => addFollow(userId, "current")}
+            >
+              {sessionUser.follows[userId] ? `Following` : `Follow`}
+            </button>
+          ) : null}
+        </div>
         <h2>{user.username} Questions:</h2>
         {userQuestions && Object.keys(userQuestions).length != 0 ? (
           <QuestionContainer

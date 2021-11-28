@@ -7,6 +7,7 @@ import {
   deleteQuestion,
   editQuestion,
   getFollowedQuestions,
+  getAllQuestions,
 } from "../store/question";
 import { authenticate } from "../store/session";
 import Modal from "./Modal/Modal";
@@ -22,19 +23,15 @@ function QuestionContainer({ questions, location, user }) {
   const [editedQuestion, setEditedQuestion] = useState("");
   // const [follows, setFollows] = useState("");
 
-  useEffect(async () => {
-    if (location === "home") {
-      dispatch(getFollowedQuestions(sessionUser));
-    } else {
-      dispatch(getQuestions(user, sessionUser.id));
-    }
-  }, [dispatch]);
-
   const questionDeleter = async location => {
     if (!sessionUser) return;
     if (location === "home") {
       dispatch(deleteQuestion(mainQuestionId)).then(() =>
         dispatch(getFollowedQuestions(sessionUser))
+      );
+    } else if (location === "all") {
+      dispatch(deleteQuestion(mainQuestionId)).then(() =>
+        dispatch(getAllQuestions(sessionUser))
       );
     } else {
       dispatch(deleteQuestion(mainQuestionId)).then(() =>
@@ -48,6 +45,10 @@ function QuestionContainer({ questions, location, user }) {
     if (location === "home") {
       await dispatch(editQuestion(mainQuestionId, editedQuestion)).then(() =>
         dispatch(getFollowedQuestions(sessionUser))
+      );
+    } else if (location === "all") {
+      await dispatch(editQuestion(mainQuestionId, editedQuestion)).then(() =>
+        dispatch(getAllQuestions(sessionUser))
       );
     } else {
       await dispatch(editQuestion(mainQuestionId, editedQuestion)).then(() =>
@@ -68,6 +69,17 @@ function QuestionContainer({ questions, location, user }) {
           user_id: sessionUser.id,
         }),
       }).then(() => dispatch(getFollowedQuestions(sessionUser)));
+    } else if (location === "all") {
+      await fetch(`/api/questions/addupvote`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question: id,
+          user_id: sessionUser.id,
+        }),
+      }).then(() => dispatch(getAllQuestions(sessionUser)));
     } else {
       await fetch(`/api/questions/addupvote`, {
         method: "POST",
@@ -166,7 +178,10 @@ function QuestionContainer({ questions, location, user }) {
                 <div className={"topQuestion"}>
                   {sessionUser.follows[obj.topAnswer.user_id] ? (
                     <div id={"topQuestionLeft"}>
-                      <Link className={"questionAnswerer"}>
+                      <Link
+                        to={`/profile/${obj.topAnswer.user_id}`}
+                        className={"questionAnswerer"}
+                      >
                         {`${obj.topAnswer.username}`}
                       </Link>
                       <p style={{ padding: "0px", margin: "0px" }}> · </p>
@@ -180,7 +195,10 @@ function QuestionContainer({ questions, location, user }) {
                     </div>
                   ) : (
                     <div id={"topQuestionLeft"}>
-                      <Link className={"questionAnswerer"}>
+                      <Link
+                        className={"questionAnswerer"}
+                        to={`/profile/${obj.topAnswer.user_id}`}
+                      >
                         {`${obj.topAnswer.username}`}
                       </Link>
                       <p
@@ -273,7 +291,12 @@ function QuestionContainer({ questions, location, user }) {
                   )}
                   <p id={"upVotesNum"}>{obj.upVotes}</p>
                 </div>
-                <p style={{ fontSize: "8pt" }}>posted by: {obj.username}</p>
+                <Link
+                  to={`/profile/${obj.user_id}`}
+                  className={"questionToProfile"}
+                >
+                  posted by: {obj.username}
+                </Link>
               </div>
             </div>
           ))
@@ -290,7 +313,7 @@ function QuestionContainer({ questions, location, user }) {
         </h2>
         <h4
           onClick={e => {
-            questionDeleter("myprofile");
+            questionDeleter(location);
             setModalDelete(false);
           }}
           id={"deleteQuestionModalButton"}

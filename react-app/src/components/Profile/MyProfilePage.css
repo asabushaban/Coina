@@ -1,5 +1,37 @@
 #profileUserHeading {
   margin-top: 70px;
-  margin-bottom: 20px;
-  padding: 20px;
+  margin-bottom: 0px;
+}
+
+#followsHolder {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#following,
+#followers {
+  font-size: 10pt;
+  margin-right: 7px;
+}
+
+#followers {
+  margin-left: 7px;
+}
+
+#followButton {
+  border-radius: 20px;
+  background-color: #2e69ff;
+  font-size: 10pt;
+  font-weight: 600;
+  height: 2.2rem;
+  width: 5.2rem;
+  color: rgb(255, 255, 255);
+  /* margin-left: 10px; */
+  border: none;
+  cursor: pointer;
+}
+
+#followButton:hover {
+  background-color: #4c7dfa;
 }

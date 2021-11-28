@@ -105,6 +105,23 @@ def question_getter(id, session_user):
     return questions
 
 
+# get all questions (read)
+@questions_routes.route('/all', methods=["PUT"])
+# @login_required
+def all_questions():
+        questions = {}
+        session_user = itemgetter("sessionUserId")(request.json)
+        session_user = session_user["id"]
+        for question in Question.query.all():
+            question = question.to_dict()
+            questions = {** questions, **question_getter(question["user_id"], session_user)}
+
+        # for user in User.query.all():
+        #     user_id = user.to_dict()["id"]
+        #     if Question.query.filter(Question.user_id==user_id).one_or_none():
+        #         questions = {**questions, **question_getter(user_id, session_user)}
+        return questions
+
 # get a users questions (read)
 @questions_routes.route('/myquestions/<int:id>', methods=["PUT"])
 @login_required
