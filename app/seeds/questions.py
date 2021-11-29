@@ -1,6 +1,5 @@
 from app.models import db, Question
-from datetime import date, datetime, timedelta
-from random import randint
+from datetime import datetime
 today = datetime.now()
 
 
@@ -13,7 +12,7 @@ def seed_questions():
     db.session.add(Question(question="How many TPS will ethereum be able to handle after the merge?", body="seed", user_id=6, created_at=today, updated_at=today))
     db.session.add(Question(question="If bitcoin is digital gold, then what is digital silver?", body="seed", user_id=7, created_at=today, updated_at=today))
     db.session.add(Question(question="Can you name something comparable to chainlink from the early days of the internet?", body="seed", user_id=8, created_at=today, updated_at=today))
-    db.session.add(Question(question="If ethereum can't scalr what's the next best alternative?", body="seed", user_id=9, created_at=today, updated_at=today))
+    db.session.add(Question(question="If ethereum can't scale what's the next best alternative?", body="seed", user_id=9, created_at=today, updated_at=today))
     db.session.add(Question(question="How much doge could a doge chuck chuck if a doge chuck could chuck doge?", body="seed", user_id=10, created_at=today, updated_at=today))
     db.session.add(Question(question="How do you value a token?", body="seed", user_id=11, created_at=today, updated_at=today))
     db.session.add(Question(question="What is web 3?", body="seed", user_id=12, created_at=today, updated_at=today))

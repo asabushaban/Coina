@@ -1,5 +1,4 @@
 from app.models import db, Follow
-from datetime import date, datetime, timedelta
 from random import randint
 
 
@@ -8,8 +7,8 @@ from random import randint
 def seed_follows():
     i = 1
     j = 1
-    for i in range(1, 316):
-        for j in range(1, 316, randint(1, 20)):
+    for i in range(1, 42):
+        for j in range(1, 42, randint(1, 4)):
             if i != j:
                 db.session.add(Follow(follower=i,followed=j))
     i+=1

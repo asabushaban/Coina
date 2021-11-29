@@ -1,0 +1,33 @@
+#about,
+#innerAbout {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+#about {
+  margin-bottom: 10px;
+  width: 100%;
+  /* height: 12%; */
+  justify-content: flex-end;
+}
+
+#github,
+#linkedin {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+#github {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+#linkedin {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+h4 {
+  margin: 0px;
+}

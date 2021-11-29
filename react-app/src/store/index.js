@@ -3,11 +3,13 @@ import thunk from "redux-thunk";
 import session from "./session";
 import questions from "./question";
 import answers from "./answer";
+import searchRes from "./search";
 
 const rootReducer = combineReducers({
   session,
   questions,
   answers,
+  searchRes,
 });
 
 let enhancer;

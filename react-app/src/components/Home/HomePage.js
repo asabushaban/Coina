@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { addNewQuestion, getFollowedQuestions } from "../../store/question";
 // import arrow from "../trans-arrow.jpeg";
 import Modal from "../Modal/Modal";
+import About from "../About/about";
 import QuestionContainer from "../QuestionContainer";
 
 function HomePage() {
@@ -72,6 +73,7 @@ function HomePage() {
         ) : (
           <h1>No one you follow has posted anything!</h1>
         )}
+        <About />
       </div>
     </>
   );

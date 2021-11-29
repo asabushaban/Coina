@@ -11,6 +11,7 @@ import {
   editAnswer,
   getAnswers,
 } from "../../store/answer";
+import About from "../About/about";
 
 function QuestionPage() {
   const sessionUser = useSelector(state => state.session.user);
@@ -321,9 +322,11 @@ function QuestionPage() {
           </div>
         ))
       ) : (
-        <p>no answers</p>
+        <>
+          <p>no answers</p>
+        </>
       )}
-
+      <About />
       <Modal
         id={"deleteQuestionModal"}
         title={`Delete Answer`}

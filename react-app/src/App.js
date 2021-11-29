@@ -9,7 +9,6 @@ import MyProfilePage from "./components/Profile/MyProfilePage";
 import ProfilePage from "./components/Profile/ProfilePage";
 import QuestionPage from "./components/Question/QuestionPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
-import UsersList from "./components/UsersList";
 import User from "./components/User";
 import AllQuestions from "./components/AllQuestions/AllQuestions";
 import { authenticate } from "./store/session";

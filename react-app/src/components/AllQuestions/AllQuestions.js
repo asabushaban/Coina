@@ -5,6 +5,7 @@ import { addNewQuestion, getAllQuestions } from "../../store/question";
 // import arrow from "../trans-arrow.jpeg";
 import Modal from "../Modal/Modal";
 import QuestionContainer from "../QuestionContainer";
+import About from "../About/about";
 
 function AllQuestions() {
   const sessionUser = useSelector(state => state.session.user);
@@ -72,6 +73,7 @@ function AllQuestions() {
         ) : (
           <h1>No one you follow has posted anything!</h1>
         )}
+        <About />
       </div>
     </>
   );
