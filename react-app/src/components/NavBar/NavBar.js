@@ -7,17 +7,17 @@ import "./NavBar.css";
 import Modal from "../Modal/Modal";
 import { addNewQuestion, getFollowedQuestions } from "../../store/question";
 import { getSearch, clearQuery } from "../../store/search";
+import About from "../About/about";
 
 const NavBar = () => {
   const sessionUser = useSelector(state => state.session.user);
   const search = useSelector(state => state.searchRes);
 
   const searchRef = useRef();
-  const [query, setQuery] = useState("");
-  const [res, setRes] = useState(false);
-  const dispatch = useDispatch();
   const history = useHistory();
+  const dispatch = useDispatch();
 
+  const [query, setQuery] = useState("");
   const [newQuestion, setNewQuestion] = useState("");
   const [modal, setModal] = useState(false);
   const [mainIcon, setMainIcon] = useState("");
@@ -40,15 +40,9 @@ const NavBar = () => {
     await dispatch(clearQuery());
   };
 
-  const submitSearch = () => {
-    document.querySelector(".SB").value = "";
-  };
-
   const SearchBar = () => {
     useEffect(() => {
-      // add when mounted
       document.addEventListener("mousedown", handleClick);
-      // return function to be called when unmounted
       return () => {
         document.removeEventListener("mousedown", handleClick);
       };
@@ -56,8 +50,6 @@ const NavBar = () => {
 
     const handleClick = e => {
       if (searchRef.current.contains(e.target)) {
-        // inside click
-
         showResults();
         return;
       }
@@ -77,7 +69,6 @@ const NavBar = () => {
                 key={question[0]}
                 onClick={e => {
                   hideResults();
-                  submitSearch();
                 }}
               >
                 {question[1]}
@@ -97,7 +88,6 @@ const NavBar = () => {
   return (
     <nav>
       <div id={"navContainer"}>
-        {/* <h1 id={"logo"}>Coina</h1> */}
         <NavLink to="/" exact={true} id={"logo"} onClick={e => setMainIcon("")}>
           Coina
         </NavLink>
@@ -201,12 +191,7 @@ const NavBar = () => {
               </svg>
             </div>
 
-            <div
-              className="searchbar"
-              ref={searchRef}
-              // onMouseEnter={showResults}
-              // onMouseLeave={hideResults}
-            >
+            <div className="searchbar" ref={searchRef}>
               <input
                 type="search"
                 value={query}
@@ -238,22 +223,11 @@ const NavBar = () => {
         >
           Add question
         </button>
-        {/* <p>
-          {sessionUser ? (
-            <>
-              <NavLink
-                id={"myProfileLink"}
-                to={`/myprofile/${sessionUser.id}`}
-                exact={true}
-                activeClassName="active"
-              >
-                Profile
-              </NavLink>
-            </>
-          ) : null}
-        </p> */}
         <p>
           <LogoutButton />
+        </p>
+        <p>
+          <About />
         </p>
       </div>
       <Modal
