@@ -2,9 +2,11 @@
 #innerAbout {
   display: flex;
   align-items: center;
+  padding: 10px;
 }
 
 #about {
+  margin-bottom: 10px;
   width: 100%;
   /* height: 12%; */
   justify-content: flex-end;

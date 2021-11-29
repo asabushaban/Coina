@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { getQuestions } from "../../store/question";
 import { authenticate } from "../../store/session";
 import QuestionContainer from "../QuestionContainer";
+import About from "../About/about";
 
 function Profile() {
   const sessionUser = useSelector(state => state.session.user);
@@ -97,6 +98,7 @@ function Profile() {
           <h1>{user.username} has not posted any questions!</h1>
         )}
       </div>
+      <About />
     </>
   );
 }

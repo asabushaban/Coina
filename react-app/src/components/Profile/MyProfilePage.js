@@ -11,6 +11,8 @@ import {
 import QuestionContainer from "../QuestionContainer";
 import { authenticate } from "../../store/session";
 
+import About from "../About/about";
+
 function MyProfile() {
   const sessionUser = useSelector(state => state.session.user);
   const userQuestions = useSelector(state => state.questions);
@@ -56,6 +58,7 @@ function MyProfile() {
           <h1>{sessionUser.username} has not posted any questions!</h1>
         )}
       </div>
+      <About />
     </>
   );
 }

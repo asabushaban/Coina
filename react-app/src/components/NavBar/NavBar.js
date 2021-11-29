@@ -7,7 +7,6 @@ import "./NavBar.css";
 import Modal from "../Modal/Modal";
 import { addNewQuestion, getFollowedQuestions } from "../../store/question";
 import { getSearch, clearQuery } from "../../store/search";
-import About from "../About/about";
 
 const NavBar = () => {
   const sessionUser = useSelector(state => state.session.user);
@@ -225,9 +224,6 @@ const NavBar = () => {
         </button>
         <p>
           <LogoutButton />
-        </p>
-        <p>
-          <About />
         </p>
       </div>
       <Modal
