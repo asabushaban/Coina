@@ -4,8 +4,8 @@ import "./about.css";
 function About() {
   return (
     <>
-      <div id="footer">
-        <div id="innerFooter">
+      <div id="about">
+        <div id="innerAbout">
           <h4>Designed by: AJ Abushaban</h4>
           <a target="_blank" href="https://github.com/asabushaban">
             <img
