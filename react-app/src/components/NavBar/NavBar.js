@@ -1,37 +1,93 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import LogoutButton from "../auth/LogoutButton";
 import { useSelector, useDispatch } from "react-redux";
 import "./NavBar.css";
 import Modal from "../Modal/Modal";
 import { addNewQuestion, getFollowedQuestions } from "../../store/question";
+import { getSearch, clearQuery } from "../../store/search";
 
 const NavBar = () => {
   const sessionUser = useSelector(state => state.session.user);
-  const searchRef = useRef();
-  // const [query, setQuery] = useState("");
+  const search = useSelector(state => state.searchRes);
 
+  const searchRef = useRef();
+  const [query, setQuery] = useState("");
+  const [res, setRes] = useState(false);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [newQuestion, setNewQuestion] = useState("");
   const [modal, setModal] = useState(false);
   const [mainIcon, setMainIcon] = useState("");
 
-  // const showResults = () => {
-  //   const searchRes = document.querySelector(".searchResults");
-  //   searchRes.style.display = "flex";
-  // };
+  useEffect(() => {
+    if (query) {
+      dispatch(getSearch(query));
+    }
+  }, [query]);
 
-  // const SearchBar = () => {
-  //   useEffect(() => {
-  // 	// add when mounted
-  // 	document.addEventListener("mousedown", handleClick);
-  // 	// return function to be called when unmounted
-  // 	return () => {
-  // 		document.removeEventListener("mousedown", handleClick);
-  // 	};
-  // }, [])
+  const showResults = () => {
+    const searchRes = document.querySelector(".searchResults");
+    searchRes.style.display = "flex";
+  };
+
+  const hideResults = async () => {
+    const searchRes = document.querySelector(".searchResults");
+    searchRes.style.display = "none";
+    setQuery("");
+    await dispatch(clearQuery());
+  };
+
+  const submitSearch = () => {
+    document.querySelector(".SB").value = "";
+  };
+
+  const SearchBar = () => {
+    useEffect(() => {
+      // add when mounted
+      document.addEventListener("mousedown", handleClick);
+      // return function to be called when unmounted
+      return () => {
+        document.removeEventListener("mousedown", handleClick);
+      };
+    }, []);
+
+    const handleClick = e => {
+      if (searchRef.current.contains(e.target)) {
+        // inside click
+
+        showResults();
+        return;
+      }
+      hideResults();
+      return;
+    };
+
+    return (
+      <div className="searchBarQuery">
+        <div className="searchResults">
+          {Object.entries(search).map(question => {
+            return (
+              <NavLink
+                className="result"
+                to={`/question/${question[0]}`}
+                value={question[1]}
+                key={question[0]}
+                onClick={e => {
+                  hideResults();
+                  submitSearch();
+                }}
+              >
+                {question[1]}
+              </NavLink>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
 
   const submitQuestion = async e => {
     if (!sessionUser) return;
@@ -149,15 +205,15 @@ const NavBar = () => {
               className="searchbar"
               ref={searchRef}
               // onMouseEnter={showResults}
-
               // onMouseLeave={hideResults}
             >
               <input
                 type="search"
-                // onKeyUp={e => {
-                //   setQuery(e.target.value);
-                //   showResults();
-                // }}
+                value={query}
+                onChange={e => {
+                  setQuery(e.target.value);
+                  showResults();
+                }}
                 style={{
                   width: "100%",
                   height: 44,
@@ -169,6 +225,8 @@ const NavBar = () => {
                 type="search"
                 className="SB"
               ></input>
+
+              <SearchBar />
             </div>
           </div>
         </div>
@@ -217,8 +275,9 @@ const NavBar = () => {
             <button
               id={"askQuestionButton"}
               onClick={() => {
-                submitQuestion();
+                history.push("/");
                 setModal(false);
+                submitQuestion();
               }}
             >
               Add question

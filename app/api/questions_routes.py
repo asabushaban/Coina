@@ -151,6 +151,20 @@ def get_question(id):
     question = Question.query.get(id)
     return question.to_dict()
 
+# get searched question
+@questions_routes.route('/search/<query>')
+# @login_required
+def get_question_query(query):
+    questions = {}
+    if Question.query.filter(Question.question.ilike(f'%{query}%')).all():
+        for q in Question.query.filter(Question.question.ilike(f'%{query}%')).all():
+            q = q.to_dict()
+            questions[q["id"]] = q["question"]
+    else:
+        return {}
+    return questions
+
+
 # delete a question (delete)
 @questions_routes.route('/<int:id>', methods=["DELETE"])
 @login_required
