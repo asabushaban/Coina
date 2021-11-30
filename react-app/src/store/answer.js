@@ -65,7 +65,7 @@ export const getAnswers = (questionId, sessionUserId) => async dispatch => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ sessionUserId: sessionUserId }),
+    body: JSON.stringify({ sessionUserId }),
   });
 
   if (response.ok) {
@@ -85,7 +85,7 @@ export const getAnswers = (questionId, sessionUserId) => async dispatch => {
 //edit a ANSWER
 
 export const editAnswer = (id, answer) => async dispatch => {
-  const res = await fetch(`/api/answers/${id}`, {
+  const res = await fetch(`/api/answers/edit/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

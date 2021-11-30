@@ -20,6 +20,7 @@ const NavBar = () => {
   const [newQuestion, setNewQuestion] = useState("");
   const [modal, setModal] = useState(false);
   const [mainIcon, setMainIcon] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (query) {
@@ -80,8 +81,22 @@ const NavBar = () => {
   };
 
   const submitQuestion = async e => {
+    if (!newQuestion) {
+      setError("question can not be empty");
+      return;
+    }
+
+    if (newQuestion.length >= 255) {
+      setError("question must be shorter");
+      return;
+    }
+
     if (!sessionUser) return;
     dispatch(addNewQuestion(newQuestion, sessionUser.id));
+    setError("");
+    setModal(false);
+    setNewQuestion("");
+    history.push("/");
   };
 
   return (
@@ -233,8 +248,14 @@ const NavBar = () => {
       >
         <div id={"askQuestionModal"}>
           <p id={"askQuestionName"}>{sessionUser.username}</p>
+          {error ? (
+            <p style={{ color: "red", textAlign: "center", margin: "0px" }}>
+              {error}
+            </p>
+          ) : null}
           <input
             id={"askQuestionInput"}
+            value={newQuestion}
             placeholder={`Start your question with "What", "How", "Why", etc.`}
             onChange={e => setNewQuestion(e.target.value)}
           ></input>
@@ -245,8 +266,6 @@ const NavBar = () => {
             <button
               id={"askQuestionButton"}
               onClick={() => {
-                history.push("/");
-                setModal(false);
                 submitQuestion();
               }}
             >

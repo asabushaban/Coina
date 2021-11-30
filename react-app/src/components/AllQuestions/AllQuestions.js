@@ -15,16 +15,30 @@ function AllQuestions() {
 
   const [newQuestion, setNewQuestion] = useState("");
   const [modal, setModal] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(async () => {
     dispatch(getAllQuestions(sessionUser));
   }, [dispatch]);
 
   const submitQuestion = async e => {
+    if (!newQuestion) {
+      setError("question can not be empty");
+      return;
+    }
+
+    if (newQuestion.length >= 255) {
+      setError("question must be shorter");
+      return;
+    }
+
     if (!sessionUser) return;
     dispatch(addNewQuestion(newQuestion, sessionUser.id)).then(() =>
       dispatch(getAllQuestions(sessionUser))
     );
+    setError("");
+    setModal(false);
+    setNewQuestion("");
   };
 
   return (
@@ -43,8 +57,14 @@ function AllQuestions() {
         >
           <div id={"askQuestionModal"}>
             <p id={"askQuestionName"}>{sessionUser.username}</p>
+            {error ? (
+              <p style={{ color: "red", textAlign: "center", margin: "0px" }}>
+                {error}
+              </p>
+            ) : null}
             <input
               id={"askQuestionInput"}
+              value={newQuestion}
               placeholder={`Start your question with "What", "How", "Why", etc.`}
               onChange={e => setNewQuestion(e.target.value)}
             ></input>
@@ -56,7 +76,6 @@ function AllQuestions() {
                 id={"askQuestionButton"}
                 onClick={() => {
                   submitQuestion();
-                  setModal(false);
                 }}
               >
                 Add question
