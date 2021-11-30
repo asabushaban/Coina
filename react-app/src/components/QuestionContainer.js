@@ -139,17 +139,17 @@ function QuestionContainer({ questions, location, user }) {
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <g fill="none" fill-rule="evenodd">
+          <g fill="none" fillRule="evenodd">
             <path
               d="M18.571 5.429h0a2 2 0 0 1 0 2.828l-9.9 9.9-4.24 1.416 1.412-4.245 9.9-9.9a2 2 0 0 1 2.828 0Z"
-              class="icon_svg-stroke"
+              className="icon_svg-stroke"
               stroke="#666"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             ></path>
             <path
-              class="icon_svg-fill_as_stroke"
+              className="icon_svg-fill_as_stroke"
               fill="#666"
               d="m4.429 19.571 2.652-.884-1.768-1.768z"
             ></path>
@@ -166,13 +166,13 @@ function QuestionContainer({ questions, location, user }) {
           viewBox="0 0 24 24"
         >
           <g
-            class="icon_svg-stroke"
+            className="icon_svg-stroke"
             stroke="#666"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             fill="none"
-            fill-rule="evenodd"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            fillRule="evenodd"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             transform="translate(4.000000, 2.000000)"
           >
             <polyline points="0 4.5 1.77777778 4.5 16 4.5"></polyline>
@@ -189,7 +189,7 @@ function QuestionContainer({ questions, location, user }) {
     <>
       {questions
         ? Object.values(questions).map(obj => (
-            <div className="questionContainter">
+            <div className="questionContainter" key={obj.id}>
               {obj.topAnswer ? (
                 <div className={"topQuestion"}>
                   {sessionUser.follows[obj.topAnswer.user_id] ? (
@@ -279,12 +279,12 @@ function QuestionContainer({ questions, location, user }) {
                     >
                       <path
                         d="M12 4 3 15h6v5h6v-5h6z"
-                        class="icon_svg-stroke icon_svg-fill"
-                        stroke-width="1.5"
+                        className="icon_svg-stroke icon_svg-fill"
+                        strokeWidth="1.5"
                         stroke="#00"
                         fill="#2e69ff"
                         // fill="666"
-                        stroke-linejoin=""
+                        strokeLinejoin=""
                       ></path>
                     </svg>
                   ) : (
@@ -297,11 +297,11 @@ function QuestionContainer({ questions, location, user }) {
                     >
                       <path
                         d="M12 4 3 15h6v5h6v-5h6z"
-                        class="icon_svg-stroke icon_svg-fill"
-                        stroke-width="1.5"
+                        className="icon_svg-stroke icon_svg-fill"
+                        strokeWidth="1.5"
                         stroke="#2e69ff"
                         fill="none"
-                        stroke-linejoin="round"
+                        strokeLinejoin="round"
                       ></path>
                     </svg>
                   )}
