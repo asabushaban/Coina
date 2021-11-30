@@ -52,6 +52,7 @@ def add_question():
 @login_required
 def question_answers(id):
     session_user = itemgetter("sessionUserId")(request.json)
+    session_user = session_user["id"]
     # question = Question.query.get(id)
     answers = {answer.id: answer.to_dict() for answer in Answer.query.filter(Answer.question_id==id)}
     for ans in answers.values():
@@ -73,7 +74,7 @@ def delete_answers(id):
     return {"delete": "success"}
 
 # edit an aswer (delete)
-@answers_routes.route('/<int:id>', methods=["PUT"])
+@answers_routes.route('/edit/<int:id>', methods=["PUT"])
 @login_required
 def edit_answers(id):
     answer = Answer.query.get(id)

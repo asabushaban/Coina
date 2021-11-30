@@ -19,6 +19,11 @@ function QuestionPage() {
   const dispatch = useDispatch();
   const { questionId } = useParams();
 
+  console.log(
+    "======================================================",
+    sessionUser
+  );
+
   const answers = Object.values(allAnswers).filter(
     answer => +answer.question_id === +questionId
   );
@@ -30,10 +35,12 @@ function QuestionPage() {
   const [question, setQuestion] = useState("");
   const [modalEdit, setModalEdit] = useState(false);
   const [modalDelete, setModalDelete] = useState(false);
+  const [error, setError] = useState("");
+  const [editError, setEditError] = useState("");
 
   useEffect(async () => {
     await dispatch(getQuestions(sessionUser.id));
-    await dispatch(getAnswers(+questionId, sessionUser.id));
+    await dispatch(getAnswers(+questionId, sessionUser));
   }, [dispatch]);
 
   useEffect(() => {
@@ -52,26 +59,52 @@ function QuestionPage() {
   }
 
   const submitAnswer = async () => {
+    if (!newAnswer) {
+      setError("answer can not be empty");
+      return;
+    }
+
+    if (newAnswer.length >= 255) {
+      setError("answer must be shorter");
+      return;
+    }
+
     if (!sessionUser) return;
     dispatch(addNewAnswer(newAnswer, sessionUser.id, +questionId));
     // dispatch(addNewAnswer(newAnswer, sessionUser.id, questionId)).then(
     //   () => dispatch(getAnswers(sessionUser.id))
     // );
+    setError("");
     setNewAnswer("");
   };
 
   const answerDeleter = async () => {
     if (!sessionUser) return;
     dispatch(deleteAnswer(mainAnswerId)).then(() =>
-      dispatch(getAnswers(+questionId, sessionUser.id))
+      dispatch(getAnswers(+questionId, sessionUser))
     );
   };
 
   const answerEditor = async () => {
+    if (!editedAnswer) {
+      setEditError("answer can not be empty");
+      return;
+    }
+
+    if (editedAnswer.length >= 255) {
+      setEditError("answer must be shorter");
+      return;
+    }
+
     if (!sessionUser) return;
+
     await dispatch(editAnswer(mainAnswerId, editedAnswer)).then(() =>
-      dispatch(getAnswers(+questionId, sessionUser.id))
+      dispatch(getAnswers(+questionId, sessionUser))
     );
+
+    setEditError("");
+    setModalEdit(false);
+    setEditedAnswer("");
   };
 
   const addUpVote = async id => {
@@ -84,7 +117,7 @@ function QuestionPage() {
         answer: id,
         user_id: sessionUser.id,
       }),
-    }).then(() => dispatch(getAnswers(+questionId, sessionUser.id)));
+    }).then(() => dispatch(getAnswers(+questionId, sessionUser)));
   };
 
   const addFollow = async id => {
@@ -199,6 +232,17 @@ function QuestionPage() {
               </g>
             </svg>
             <p>Answer</p>
+            {error ? (
+              <p
+                style={{
+                  color: "red",
+                  textAlign: "center",
+                  marginLeft: "320px",
+                }}
+              >
+                {error}
+              </p>
+            ) : null}
           </div>
           <div hidden={openAnswer} id={"answerContainer"}>
             <textarea
@@ -354,6 +398,11 @@ function QuestionPage() {
       >
         <div id={"askQuestionModal"}>
           <p id={"askQuestionName"}>{sessionUser.username}</p>
+          {editError ? (
+            <p style={{ color: "red", textAlign: "center", margin: "0px" }}>
+              {editError}
+            </p>
+          ) : null}
           <input
             id={"askQuestionInput"}
             value={editedAnswer}
@@ -370,7 +419,6 @@ function QuestionPage() {
               id={"askQuestionButton"}
               onClick={() => {
                 answerEditor();
-                setModalEdit(false);
               }}
             >
               Edit answer

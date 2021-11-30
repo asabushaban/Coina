@@ -23,6 +23,8 @@ function QuestionContainer({ questions, location, user }) {
   const [editedQuestion, setEditedQuestion] = useState("");
   // const [follows, setFollows] = useState("");
 
+  const [error, setError] = useState("");
+
   const questionDeleter = async location => {
     if (!sessionUser) return;
     if (location === "home") {
@@ -41,6 +43,16 @@ function QuestionContainer({ questions, location, user }) {
   };
 
   const questionEditor = async location => {
+    if (!editedQuestion) {
+      setError("question can not be empty");
+      return;
+    }
+
+    if (editedQuestion.length >= 255) {
+      setError("question must be shorter");
+      return;
+    }
+
     if (!sessionUser) return;
     if (location === "home") {
       await dispatch(editQuestion(mainQuestionId, editedQuestion)).then(() =>
@@ -55,6 +67,10 @@ function QuestionContainer({ questions, location, user }) {
         dispatch(getQuestions(user, sessionUser.id))
       );
     }
+
+    setError("");
+    setModalEdit(false);
+    setEditedQuestion("");
   };
 
   const addUpVote = async (id, location) => {
@@ -329,6 +345,11 @@ function QuestionContainer({ questions, location, user }) {
       >
         <div id={"askQuestionModal"}>
           <p id={"askQuestionName"}>{sessionUser.username}</p>
+          {error ? (
+            <p style={{ color: "red", textAlign: "center", margin: "0px" }}>
+              {error}
+            </p>
+          ) : null}
           <input
             id={"askQuestionInput"}
             value={editedQuestion}
@@ -345,7 +366,6 @@ function QuestionContainer({ questions, location, user }) {
               id={"askQuestionButton"}
               onClick={() => {
                 questionEditor(location);
-                setModalEdit(false);
               }}
             >
               Edit question
