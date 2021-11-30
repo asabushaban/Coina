@@ -190,7 +190,7 @@ function QuestionContainer({ questions, location, user }) {
       {questions
         ? Object.values(questions).map(obj => (
             <div className="questionContainter" key={obj.id}>
-              {obj.topAnswer ? (
+              {obj.topAnswer && sessionUser.follows ? (
                 <div className={"topQuestion"}>
                   {sessionUser.follows[obj.topAnswer.user_id] ? (
                     <div id={"topQuestionLeft"}>

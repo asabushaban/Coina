@@ -86,6 +86,12 @@ def sign_up():
         )
         db.session.add(user)
         db.session.commit()
+        made_user = User.query.filter(User.username == form.data['username']).one_or_none()
+        follow = Follow(follower = made_user.to_dict()["id"], followed = 1)
+        followed = Follow(follower = 1, followed = made_user.to_dict()["id"])
+        db.session.add(follow)
+        db.session.add(followed)
+        db.session.commit()
         login_user(user)
         return user.to_dict()
     return {'errors': validation_errors_to_error_messages(form.errors)}, 401
