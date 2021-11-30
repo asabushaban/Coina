@@ -74,7 +74,7 @@ const LoginForm = () => {
             <button
               id="askQuestionButton"
               onClick={async e => {
-                await dispatch(login("marnie@aa.io", "password"));
+                await dispatch(login("demo@aa.io", "password"));
               }}
             >
               Demo
