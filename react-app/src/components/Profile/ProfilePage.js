@@ -78,7 +78,7 @@ function Profile() {
               <p id={"followers"}>{follows.totalFollowers} followers</p>
             </div>
           ) : null}
-          {userId != sessionUser.id ? (
+          {userId != sessionUser.id && sessionUser.follows ? (
             <button
               id={"followButton"}
               onClick={e => addFollow(userId, "current")}

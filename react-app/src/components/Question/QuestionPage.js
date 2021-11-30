@@ -261,7 +261,7 @@ function QuestionPage() {
       ) : (
         <p>loading...</p>
       )}
-      {answers ? (
+      {answers && sessionUser.follows ? (
         answers.map(answer => (
           <div
             className="questionContainter"
