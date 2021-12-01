@@ -23,7 +23,7 @@ users can post new questions by clicking and the top white container that reads 
 
 within each question container, users can upvote questions they like.
 
-within each question container, the highest voted answer will appear as the answer to the question.
+within each question container, the highest voted answer appers as the answer to the question.
 
 within each question container, users can follow or unfollow other users who have answered a question posted by someone they follow.
 
