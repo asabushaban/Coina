@@ -16,7 +16,6 @@ def seed_follows():
     db.session.commit()
 
 
-
 def undo_follows():
     db.session.execute('TRUNCATE users RESTART IDENTITY CASCADE;')
     db.session.commit()
