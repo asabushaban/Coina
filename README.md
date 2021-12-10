@@ -3,7 +3,7 @@
 <a href="https://coina.herokuapp.com"/>Try Coina</a>
 
 ## Introduction
-Coina is a question forum for blockchain, crypto and web 3.0 enthusiasts to discuss their favorite thing. Coina is a spin-off of the popular web application Quora. 
+Coina is a question forum for blockchain, crypto and web 3.0 enthusiasts. Users can discuss their favorite technology, ask & answer questions or learn about new and exciting things. Coina is a spin-off of the popular web application Quora. 
 
 ![Alt Text](https://github.com/asabushaban/Coina/blob/main/react-app/public/wireframes/login:splash.png)
 
