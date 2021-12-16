@@ -8,6 +8,7 @@ class Answer(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(255), nullable=False)
+    image= db.Column(db.String(255), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     question_id = db.Column(db.Integer, db.ForeignKey("questions.id"), nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), nullable=False)
@@ -25,6 +26,7 @@ class Answer(db.Model):
         return {
                         'id': self.id,
                         'body': self.body,
+                        'image': self.image,
                         'user_id': self.user_id,
                         'question_id': self.question_id,
                         'created_at' : self.created_at.strftime("%m-%d-%Y %I:%M %p"),
