@@ -39,24 +39,36 @@ export const deleteAnswer = id => async dispatch => {
 };
 
 //create a ANSWER
-export const addNewAnswer = (body, userId, questionId) => async dispatch => {
-  const res = await fetch(`/api/answers/add`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      body: body,
-      user_id: userId,
-      question_id: questionId,
-    }),
-  });
+export const addNewAnswer =
+  (body, image, userId, questionId) => async dispatch => {
+    if (image) {
+      const form = new FormData();
+      form.append("image", image);
+      const res = await fetch(`/api/images/add`, {
+        method: "POST",
+        body: form,
+      });
+      image = await res.json();
+    }
 
-  if (res.ok) {
-    const data = await res.json();
-    dispatch(addAnswer(data));
-  }
-};
+    const res = await fetch(`/api/answers/add`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        body: body,
+        image: image["image"],
+        user_id: userId,
+        question_id: questionId,
+      }),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      dispatch(addAnswer(data));
+    }
+  };
 
 //get ANSWERs for one user
 export const getAnswers = (questionId, sessionUserId) => async dispatch => {

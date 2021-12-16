@@ -8,5 +8,6 @@ from app.models import User
 
 class AnswerForm(FlaskForm):
     body = StringField("body", validators = [DataRequired()])
+    image = StringField("image")
     user_id = StringField("user_id", validators = [DataRequired()])
     question_id = StringField("question_id", validators = [DataRequired()])

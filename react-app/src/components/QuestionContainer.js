@@ -260,6 +260,11 @@ function QuestionContainer({ questions, location, user }) {
               {obj.topAnswer ? (
                 <div>
                   <p style={{ fontSize: "10pt" }}>{`${obj.topAnswer.body}`}</p>
+                  <>
+                    {obj.topAnswer.image ? (
+                      <img id={"questionImage"} src={obj.topAnswer.image} />
+                    ) : null}
+                  </>
                 </div>
               ) : (
                 <p> Answer this question..</p>

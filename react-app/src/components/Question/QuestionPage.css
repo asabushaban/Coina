@@ -7,6 +7,13 @@
   /* padding-bottom: 80px; */
 }
 
+#questionImage {
+  width: auto;
+  height: auto;
+  max-width: 510px;
+  max-height: 800px;
+}
+
 #answerHeading {
   margin-top: 80px;
   width: 53%;

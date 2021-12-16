@@ -25,16 +25,19 @@ def add_upvote():
     return "success"
 
 
-# add a question (create)
+# add a answer (create)
 @answers_routes.route('/add', methods=["POST"])
 @login_required
 def add_question():
-    # question, user_id = itemgetter("question", "user_id")(request.json)
+    image = itemgetter("image")(request.json)
     # user = User.query.get(user_id)
     form = AnswerForm()
+    print("==========================",form.data["body"])
+    print("==========================",image)
     if(form.validate_on_submit):
         newAnswer = Answer(
             body = form.data["body"],
+            image = image,
             user_id = form.data["user_id"],
             question_id = form.data["question_id"],
             created_at=today,

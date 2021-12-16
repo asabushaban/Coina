@@ -13,7 +13,7 @@ const clearSearch = () => ({
 
 const initialState = {};
 
-//get search results
+//get questions for one user
 export const getSearch = query => async dispatch => {
   const response = await fetch(`/api/questions/search/${query}`);
 

@@ -32,11 +32,14 @@ function QuestionPage() {
   const [modalDelete, setModalDelete] = useState(false);
   const [error, setError] = useState("");
   const [editError, setEditError] = useState("");
+  const [image, setImage] = useState(null);
 
   useEffect(async () => {
     await dispatch(getQuestions(sessionUser.id));
     await dispatch(getAnswers(+questionId, sessionUser));
-  }, [dispatch]);
+
+    console.log("====================================", image);
+  }, [dispatch, image]);
 
   useEffect(() => {
     if (!questionId) {
@@ -65,7 +68,8 @@ function QuestionPage() {
     }
 
     if (!sessionUser) return;
-    dispatch(addNewAnswer(newAnswer, sessionUser.id, +questionId));
+
+    dispatch(addNewAnswer(newAnswer, image, sessionUser.id, +questionId));
     // dispatch(addNewAnswer(newAnswer, sessionUser.id, questionId)).then(
     //   () => dispatch(getAnswers(sessionUser.id))
     // );
@@ -227,6 +231,14 @@ function QuestionPage() {
               </g>
             </svg>
             <p>Answer</p>
+            <input
+              style={{ marginLeft: "170px" }}
+              hidden={openAnswer}
+              id="post-pic"
+              type="file"
+              accept="image/*"
+              onChange={e => setImage(e.target.files[0])}
+            ></input>
             {error ? (
               <p
                 style={{
@@ -269,6 +281,10 @@ function QuestionPage() {
           >
             <div id={"answerContainerTop"}>
               <p>{answer.body}</p>
+              {answer.image ? (
+                <img id={"questionImage"} src={answer.image} />
+              ) : null}
+
               {answer.user_id === sessionUser.id ? (
                 <>{deleteAndEditElements(answer)}</>
               ) : null}
