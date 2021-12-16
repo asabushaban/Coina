@@ -8,9 +8,10 @@
 }
 
 #questionImage {
-  width: auto;
-  height: auto;
-  max-width: 510px;
+  /* width: auto;
+  height: auto; */
+
+  width: 510px;
   max-height: 800px;
 }
 
