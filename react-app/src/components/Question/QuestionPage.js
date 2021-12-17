@@ -135,7 +135,7 @@ function QuestionPage() {
 
   const deleteAndEditElements = answer => {
     return (
-      <div>
+      <div id={"deleteAndEdit"}>
         <svg
           onClick={e => {
             setModalEdit(true);
@@ -328,7 +328,7 @@ function QuestionPage() {
               ) : null}
             </div>
             {answer.image ? (
-              <img id={"questionImage"} src={answer.image} />
+              <img id={"questionImageAnswer"} src={answer.image} />
             ) : null}
             <div className={"bottomQuestion"}>
               <div
