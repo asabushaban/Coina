@@ -258,14 +258,24 @@ function QuestionContainer({ questions, location, user }) {
               </Link>
               {/* top answer displayed chaining, if answered display the top answer or propmt user to answer the question */}
               {obj.topAnswer ? (
-                <div>
-                  <p style={{ fontSize: "10pt" }}>{`${obj.topAnswer.body}`}</p>
-                  <>
+                <>
+                  <div>
+                    <p
+                      style={{ fontSize: "10pt" }}
+                    >{`${obj.topAnswer.body}`}</p>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      width: "100%",
+                    }}
+                  >
                     {obj.topAnswer.image ? (
                       <img id={"questionImage"} src={obj.topAnswer.image} />
                     ) : null}
-                  </>
-                </div>
+                  </div>
+                </>
               ) : (
                 <p> Answer this question..</p>
               )}

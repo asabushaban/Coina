@@ -8,10 +8,26 @@
 }
 
 #questionImage {
-  width: auto;
-  height: auto;
-  max-width: 510px;
+  /* width: auto;
+  height: auto; */
+
+  width: "100%";
+  max-width: 800px;
   max-height: 800px;
+}
+
+#questionImageAnswer {
+  width: 100%;
+  height: 80%;
+
+  /* width: fit-content; */
+  /* max-width: 800px; */
+  /* height: 800px; */
+}
+
+#deleteAndEdit {
+  display: flex;
+  width: 10%;
 }
 
 #answerHeading {
