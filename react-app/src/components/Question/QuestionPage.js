@@ -279,16 +279,6 @@ function QuestionPage() {
             className="questionContainter"
             onClick={e => setMainAnswerId(answer.id)}
           >
-            <div id={"answerContainerTop"}>
-              <p>{answer.body}</p>
-              {answer.image ? (
-                <img id={"questionImage"} src={answer.image} />
-              ) : null}
-
-              {answer.user_id === sessionUser.id ? (
-                <>{deleteAndEditElements(answer)}</>
-              ) : null}
-            </div>
             {sessionUser.follows[answer.user_id] ? (
               <div id={"topQuestionLeft"}>
                 <Link
@@ -330,6 +320,16 @@ function QuestionPage() {
                 </p>
               </div>
             )}
+            <div id={"answerContainerTop"}>
+              <p>{answer.body}</p>
+
+              {answer.user_id === sessionUser.id ? (
+                <>{deleteAndEditElements(answer)}</>
+              ) : null}
+            </div>
+            {answer.image ? (
+              <img id={"questionImage"} src={answer.image} />
+            ) : null}
             <div className={"bottomQuestion"}>
               <div
                 className={"bottomQuestionLeft"}

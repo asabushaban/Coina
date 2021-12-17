@@ -272,11 +272,7 @@ function QuestionContainer({ questions, location, user }) {
                     }}
                   >
                     {obj.topAnswer.image ? (
-                      <img
-                        style={{ width: "100%" }}
-                        id={"questionImage"}
-                        src={obj.topAnswer.image}
-                      />
+                      <img id={"questionImage"} src={obj.topAnswer.image} />
                     ) : null}
                   </div>
                 </>
