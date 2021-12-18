@@ -44,6 +44,10 @@
   margin-bottom: -25px;
 }
 
+#file-upload-button {
+  color: blue;
+}
+
 /* #answerButton:hover {
   background-color: rgb(241, 237, 234);
   border-radius: 20px;
