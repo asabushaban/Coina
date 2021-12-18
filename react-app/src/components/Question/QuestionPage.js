@@ -231,14 +231,6 @@ function QuestionPage() {
               </g>
             </svg>
             <p>Answer</p>
-            <input
-              style={{ marginLeft: "170px" }}
-              hidden={openAnswer}
-              id="post-pic"
-              type="file"
-              accept="image/*"
-              onChange={e => setImage(e.target.files[0])}
-            ></input>
             {error ? (
               <p
                 style={{
@@ -258,16 +250,31 @@ function QuestionPage() {
               value={newAnswer}
               onChange={e => setNewAnswer(e.target.value)}
             ></textarea>
-            <button
-              id={"submitAnswer"}
-              hidden={openAnswer}
-              onClick={() => {
-                submitAnswer();
-                setOpenAnswer(!openAnswer);
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
               }}
             >
-              Answer
-            </button>
+              <input
+                id={"post-pic"}
+                hidden={openAnswer}
+                type="file"
+                accept="image/*"
+                onChange={e => setImage(e.target.files[0])}
+              ></input>
+              <button
+                id={"submitAnswer"}
+                hidden={openAnswer}
+                onClick={() => {
+                  submitAnswer();
+                  setOpenAnswer(!openAnswer);
+                }}
+              >
+                Answer
+              </button>
+            </div>
           </div>
         </>
       ) : (
