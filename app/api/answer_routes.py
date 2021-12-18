@@ -26,7 +26,7 @@ def add_upvote():
 
 
 # add a answer (create)
-@answers_routes.route('/add', methods=["POST"])
+@answers_routes.route('/add/image', methods=["POST"])
 @login_required
 def add_question():
     image = itemgetter("image")(request.json)
@@ -38,6 +38,24 @@ def add_question():
         newAnswer = Answer(
             body = form.data["body"],
             image = image,
+            user_id = form.data["user_id"],
+            question_id = form.data["question_id"],
+            created_at=today,
+            updated_at=today
+        )
+        db.session.add(newAnswer)
+        db.session.commit()
+        return newAnswer.to_dict()
+    else:
+        return None
+
+@answers_routes.route('/add', methods=["POST"])
+@login_required
+def add_image():
+    form = AnswerForm()
+    if(form.validate_on_submit):
+        newAnswer = Answer(
+            body = form.data["body"],
             user_id = form.data["user_id"],
             question_id = form.data["question_id"],
             created_at=today,

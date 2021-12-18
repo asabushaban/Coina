@@ -50,19 +50,33 @@ export const addNewAnswer =
       });
       image = await res.json();
     }
-
-    const res = await fetch(`/api/answers/add`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        body: body,
-        image: image["image"],
-        user_id: userId,
-        question_id: questionId,
-      }),
-    });
+    let res;
+    if (image) {
+      res = await fetch(`/api/answers/add/image`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          body: body,
+          image: image["image"],
+          user_id: userId,
+          question_id: questionId,
+        }),
+      });
+    } else {
+      res = await fetch(`/api/answers/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          body: body,
+          user_id: userId,
+          question_id: questionId,
+        }),
+      });
+    }
 
     if (res.ok) {
       const data = await res.json();
