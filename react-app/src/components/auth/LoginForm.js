@@ -39,15 +39,18 @@ const LoginForm = () => {
             </p>
           </div>
           <form id={"bottomLoginForm"}>
-            <div>
+            <div className={"loginField"}>
               {errors.map((error, ind) => (
                 <div key={ind}>{error}</div>
               ))}
             </div>
-            <label htmlFor="email">Email</label>
+            <label className={"loginField"} htmlFor="email">
+              Email
+            </label>
             <div>
               <input
-                className={"loginInput"}
+                className={"loginField"}
+                id={"loginInput"}
                 name="email"
                 type="text"
                 placeholder="Your Email"
@@ -55,10 +58,13 @@ const LoginForm = () => {
                 onChange={e => setEmail(e.target.value)}
               />
             </div>
-            <label htmlFor="password">Password</label>
+            <label className={"loginField"} htmlFor="password">
+              Password
+            </label>
             <div>
               <input
-                className={"loginInput"}
+                className={"loginField"}
+                id={"loginInput"}
                 name="password"
                 type="password"
                 placeholder="Your Password"

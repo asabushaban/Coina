@@ -178,7 +178,6 @@ login form styling
 #loginForm {
   display: flex;
   flex-direction: column;
-  height: 50%;
   width: 50%;
   background-color: snow;
   border-radius: 8px;
@@ -195,14 +194,18 @@ login form styling
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  /* justify-content: space-around; */
   margin-bottom: 20px;
   margin-left: 20%;
 }
 
-.loginInput {
+.loginField {
+  margin-bottom: 5%;
+}
+
+#loginInput {
   width: 80%;
-  height: 115%;
+  height: 50%;
 }
 
 #loginButtons {
