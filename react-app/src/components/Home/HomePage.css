@@ -64,6 +64,15 @@ body {
   box-shadow: 0.25px 0.25px 0.25px 0.25px rgba(190, 190, 190, 0.2);
 }
 
+@media screen and (max-width: 925px) {
+  .questionContainter {
+    width: 80%;
+  }
+  #askQuestionBox {
+    width: 80%;
+  }
+}
+
 .questionLink {
   font-size: 14pt;
   text-decoration: none;
