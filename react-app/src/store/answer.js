@@ -51,6 +51,7 @@ export const addNewAnswer =
       image = await res.json();
     }
     let res;
+
     if (image) {
       res = await fetch(`/api/answers/add/image`, {
         method: "POST",
