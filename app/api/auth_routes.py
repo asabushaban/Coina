@@ -105,7 +105,7 @@ def unauthorized():
     return {'errors': ['Unauthorized']}, 401
 
 
-
+#the below code is kept just in case I need to revert
 
 # @auth_routes.route('/')
 # def authenticate():
