@@ -105,8 +105,6 @@ def unauthorized():
     return {'errors': ['Unauthorized']}, 401
 
 
-
-
 # @auth_routes.route('/')
 # def authenticate():
 #     """
